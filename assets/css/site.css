@@ -75,7 +75,8 @@ main, header, footer { position: relative; z-index: 1; }
   backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--line);
 }
-.brand { font-family: var(--mono); font-weight: 700; letter-spacing: 0.32em; color: var(--ink); text-decoration: none; font-size: 15px; }
+.brand { display: inline-flex; align-items: center; min-height: 44px; }
+.brand img { width: 118px; height: auto; filter: drop-shadow(0 0 8px rgba(190, 210, 255, 0.35)); }
 .brand span { color: var(--teal); }
 .nav ul { list-style: none; display: flex; gap: 6px; margin: 0; padding: 0; }
 .nav a.navlink {
@@ -147,8 +148,10 @@ section.block { padding: clamp(80px, 11vw, 140px) 0; position: relative; }
 .hero .horizon { position: absolute; left: 0; right: 0; top: 40%; height: 1px; background: linear-gradient(90deg, transparent, rgba(108, 140, 255, 0.7), transparent); box-shadow: 0 0 30px 6px rgba(108, 140, 255, 0.25); }
 .hero .scan { position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 4px); pointer-events: none; }
 .hero-inner { position: relative; z-index: 2; max-width: 980px; padding: 0 20px; }
-.lab-mark { position: relative; width: min(560px, 90vw); margin: 0 auto 34px; aspect-ratio: 2.4 / 1; display: grid; place-items: center; }
+.lab-mark { position: relative; width: min(620px, 88vw); margin: 0 auto 30px; display: grid; place-items: center; padding: 6% 0; }
 .lab-mark svg.orbits { position: absolute; inset: -30% -10%; width: 120%; height: 160%; overflow: visible; }
+.lab-mark img.logo { position: relative; width: 100%; height: auto; filter: drop-shadow(0 0 22px rgba(170, 200, 255, 0.35)); animation: logo-in 1.6s ease both; }
+@keyframes logo-in { from { opacity: 0; transform: scale(0.96); filter: blur(6px); } }
 .lab-mark .word {
   font-family: var(--sans); font-weight: 800; font-size: clamp(64px, 12vw, 132px); letter-spacing: 0.16em; line-height: 1;
   background: linear-gradient(180deg, #ffffff 0%, #c9d3ea 55%, #7d8aa8 100%); -webkit-background-clip: text; background-clip: text; color: transparent;

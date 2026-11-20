@@ -5,7 +5,7 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 L = "https://sahil-ams-ds.lovable.app"          # files still hosted on the Lovable site
 GH = "https://github.com/sahiljangra12"
 IO = "https://sahiljangra12.github.io"
-CV = L + "/__l5e/assets-v1/62916126-9bfb-4a0b-913a-abdd177dfc4b/CV_Sahil.pdf"
+CV = "papers/CV_Sahil.pdf"
 EMAIL = "sfnu1@jh.edu"
 LINKEDIN = "https://www.linkedin.com/in/sahil-j-3b5322261"
 EXT = ' target="_blank" rel="noopener"'
@@ -40,12 +40,12 @@ def head(title, desc, base=""):
 
 def nav(base="", home=True):
     p = "" if home else base + "index.html"
-    items = [("Education", "#education"), ("Research", "#research"), ("Commentary", "#commentary"), ("About", base + "about.html"), ("Contact", "#contact")]
+    items = [("Writing", base + "writing.html"), ("Education", "#education"), ("Research", "#research"), ("Commentary", "#commentary"), ("About", base + "about.html"), ("Contact", "#contact")]
     lis = "".join(f'<li><a class="navlink" href="{h if h.endswith(".html") else p + h}">{t}</a></li>' for t, h in items)
     return f"""<header class="nav">
-<a class="brand" href="{base}index.html#top" aria-label="Sahil Lab, home">SAHIL<span>/</span>LAB</a>
+<a class="brand" href="{base}index.html#top" aria-label="Sahil Lab, home"><img src="{base}assets/img/sahil-lab-logo.png" alt="" width="120" height="30"></a>
 <button class="menu-btn" aria-expanded="false" aria-controls="nav-list" aria-label="Open menu"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 5h16M2 10h16M2 15h16" stroke="currentColor" stroke-width="2"/></svg></button>
-<nav aria-label="Main"><ul id="nav-list">{lis}<li><a class="navlink" href="{CV}"{EXT}>CV ↗</a></li></ul></nav>
+<nav aria-label="Main"><ul id="nav-list">{lis}<li><a class="navlink" href="{base}{CV}">CV ↗</a></li></ul></nav>
 </header>
 """
 
@@ -130,6 +130,7 @@ PROJECTS = [
          tags="Python · pandas · DuckDB / Parquet · GitHub Actions · JavaScript · Observable Plot · GitHub Pages · Data: UN SDG Global Database, World Bank WDI and Our World in Data, each under its own licence."),
     dict(id="s-thesis", art="thesis", accent="#f4b740", label="Undergraduate thesis · TISS · 1990–2023", idx="THESIS · 1990–2023", name="Planetary boundaries & development",
          title="Development.<br>At what planetary cost?",
+         kicker="Planetary Boundary Transgressions and Divergent Socio-Economic Pathways", sub="A Cross-National Quantitative Analysis · Supervisor: Dr. Kamal Kumar Murari, TISS",
          lead="Do better living conditions come with greater environmental pressure? My thesis examines world-level patterns across three decade-scale study periods, exploring how development and selected environmental pressures are associated over time.",
          stats=[("World-level", "environmental pressure & development"), ("4", "development–pressure profiles"), ("0.40 → 0.25", "pressure–life expectancy correlation weakens over time")],
          statnote="Country-period observations, not annual measurements. Associations do not establish causation.",
@@ -216,8 +217,7 @@ def index_page():
     projects = "".join(project_html(p, i + 1) for i, p in enumerate(PROJECTS))
     orbits = """<svg class="orbits" viewBox="0 0 600 300" aria-hidden="true"><defs><linearGradient id="og" x1="0" x2="1"><stop offset="0" stop-color="#9fb8ff" stop-opacity="0"/><stop offset=".5" stop-color="#cfe0ff" stop-opacity=".7"/><stop offset="1" stop-color="#9fb8ff" stop-opacity="0"/></linearGradient></defs>
 <g fill="none" stroke="url(#og)" stroke-width="1.2"><ellipse cx="300" cy="150" rx="290" ry="92" transform="rotate(-8 300 150)"/><ellipse cx="300" cy="150" rx="250" ry="70" transform="rotate(-8 300 150)"/><ellipse cx="300" cy="150" rx="210" ry="52" transform="rotate(-8 300 150)" stroke-dasharray="3 7"/></g>
-<g fill="#fff"><circle cx="78" cy="130" r="2.2"/><circle cx="520" cy="110" r="1.6"/><circle cx="455" cy="210" r="2"/><circle cx="160" cy="205" r="1.4"/></g>
-<path d="M420 70 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4 l10 -4 z" fill="#fff"/></svg>"""
+<g fill="#fff"><circle cx="78" cy="130" r="2.2"/><circle cx="520" cy="110" r="1.6"/><circle cx="455" cy="210" r="2"/><circle cx="160" cy="205" r="1.4"/></g></svg>"""
     return head("Sahil — Data Science & Research", "Sahil's work in statistics, machine learning and data science, with applications in sustainability, climate, energy, health and the SDGs.") + nav() + f"""
 <main id="main">
 <section class="hero" id="top">
@@ -225,7 +225,7 @@ def index_page():
 <span class="corner c1" aria-hidden="true"></span><span class="corner c2" aria-hidden="true"></span><span class="corner c3" aria-hidden="true"></span><span class="corner c4" aria-hidden="true"></span>
 <span class="code hud-l" aria-hidden="true">SJ/00 — RESEARCH CONSOLE</span><span class="code hud-r" aria-hidden="true">39.33° N · 76.62° W</span>
 <div class="hero-inner">
-<div class="lab-mark">{orbits}<div><div class="word">SAHIL</div><div class="sub">LAB</div></div></div>
+<div class="lab-mark">{orbits}<img class="logo" src="assets/img/sahil-lab-logo.png" alt="Sahil Lab" width="2056" height="521"></div>
 <p class="eyebrow" style="color:var(--ink-2)">Johns Hopkins University · MSE · 2026–28</p>
 <h1>Data science.<br>Evidence before conclusions.<span class="cursor" aria-hidden="true"></span></h1>
 <p class="sub">Statistical and machine-learning research on sustainability and development. B.S. (Honours with Research), TISS Mumbai.</p>
@@ -251,6 +251,7 @@ def index_page():
 <p class="deg">B.S. (Honours with Research), Analytics &amp; Sustainability Studies</p>
 <p class="meta"><span>Mumbai, India</span><span>2022–2026</span></p>
 <p>Eight semesters across statistics, programming, machine learning, GIS and environmental science, with two supervised field immersions and a research dissertation.</p>
+<p><span class="code" style="color:var(--amber)">Honours thesis</span><br><span style="color:var(--ink)">Planetary Boundary Transgressions and Divergent Socio-Economic Pathways: A Cross-National Quantitative Analysis</span><br><span class="note">Supervisor: Dr. Kamal Kumar Murari · Summer internship: Good Business Lab</span></p>
 <p class="note">Courses graded 9.0/10 and above · 13 courses</p>
 </article>
 </div></div></section>
@@ -316,7 +317,7 @@ def index_page():
 <p class="eyebrow">Let’s connect</p>
 <h2>Good questions deserve<br>careful data.</h2>
 <p>I'm looking for research and data science work in environment, health, development and public policy, where the questions are real and the data needs care.</p>
-<div class="row"><a class="btn pulse" href="mailto:{EMAIL}">{EMAIL} <span aria-hidden="true">↗</span></a><a class="btn" href="{LINKEDIN}"{EXT}>LinkedIn ↗</a><a class="btn" href="{GH}"{EXT}>GitHub ↗</a><a class="btn" href="{CV}"{EXT}>CV (PDF) ↗</a></div>
+<div class="row"><a class="btn pulse" href="mailto:{EMAIL}">{EMAIL} <span aria-hidden="true">↗</span></a><a class="btn" href="{LINKEDIN}"{EXT}>LinkedIn ↗</a><a class="btn" href="{GH}"{EXT}>GitHub ↗</a><a class="btn" href="{CV}">CV (PDF) ↗</a></div>
 <p class="code" style="margin-top:28px">Baltimore, Maryland</p>
 </div></section>
 </main>
@@ -413,7 +414,7 @@ def about_page():
 
 <section class="block" id="academic-projects">{hud("06 / ACADEMIC PROJECTS", "Coursework", "Academic projects", "Coursework projects collected in one repository.")}
 <a class="btn" href="{GH}/Academic-Projects"{EXT}>Explore my academic projects on GitHub <span aria-hidden="true">↗</span></a>
-<a class="btn" href="{CV}"{EXT} style="margin-left:8px">CV (PDF) ↗</a></section>
+<a class="btn" href="{CV}" style="margin-left:8px">CV (PDF) ↗</a></section>
 </div></main>
 """ + foot()
 
@@ -467,6 +468,37 @@ def trees_page():
 """ + foot(b)
 
 
+
+
+def writing_page():
+    def item(kind, title, sub, href=None, label="Read paper"):
+        link = f'<a class="btn" href="{href}"{a_attrs(href)}>{label} <span aria-hidden="true">↗</span></a>' if href else '<p class="note">Original thesis PDF not yet available</p>'
+        return f'<article class="glass reveal" style="padding:26px"><span class="code">{kind}</span><h3 style="font-size:24px;margin:8px 0 8px">{title}</h3><p>{sub}</p>{link}</article>'
+    com = item("Theory paper · October 2026", "Knowing People Without Making Them", "A Theory of Closure, Experience, and Person-Aligned Prediction in Complex Social Systems.", L + "/__l5e/assets-v1/91c1bce6-a300-4b72-b14c-f174d806d2e0/knowing_without_making-2.pdf")
+    papers = "".join([
+        item("Working paper · October 2026", "Do New Street Trees Cool Baltimore?", "Within-neighborhood evidence from Baltimore’s street-tree program, 2006–2025.", "papers/baltimore-street-tree-paper.pdf"),
+        item("Baltimore Heat Atlas", "Where heat meets vulnerability", "Summer surface heat, health and social conditions across Baltimore City.", "papers/baltimore-heat-vulnerability.pdf"),
+        item("Climate &amp; development", "Social shortfall, climate overshoot and the falling carbon cost of development", "A study of social development and climate pressure.", "papers/social-shortfall-climate-overshoot.pdf"),
+        item("Undergraduate thesis · TISS", "Planetary Boundary Transgressions and Divergent Socio-Economic Pathways", "A world-level study of planetary pressure and development, 1990–2023."),
+    ])
+    reports = "".join([
+        item("Technical report · November 2026", "Neural Network Lab", "An open, browser-based training console and interactive curriculum: the lab’s learning engine, curriculum and reproducible checks.", "papers/neural-network-lab-technical-report.pdf", "Read report"),
+        item("Technical report", "Energy Transition and Development", "Renewable energy trends, income comparisons and the question of convergence.", "papers/energy-transition-report.pdf", "Read report"),
+        item("Method &amp; validation", "PolicyAudit", "The manual for auditing treatment-targeting models using randomized pilot data.", L + "/__l5e/assets-v1/c99d0db8-79ed-42fa-8bf9-73922aa30bda/policyaudit_manual.pdf", "Read manual"),
+    ])
+    grid = 'style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px"'
+    return head("Writing — Sahil", "Research papers, commentary and technical reports by Sahil.") + nav(home=False) + f"""
+<main id="main"><div class="wrap">
+<section class="page-hero"><p class="eyebrow">Papers · Commentary · Reports</p><h1>Writing</h1>
+<p style="max-width:700px;font-size:19px">Research papers, ideas and methods on people, development and the environment.</p></section>
+<section class="block" style="padding-top:20px">{hud("01 / COMMENTARY", "Theory", "Commentary")}<div {grid}>{com}</div></section>
+<section class="block">{hud("02 / RESEARCH PAPERS", "Working papers", "Research papers")}<div {grid}>{papers}</div></section>
+<section class="block">{hud("03 / REPORTS &amp; METHODS", "Technical", "Reports &amp; methods")}<div {grid}>{reports}</div></section>
+</div></main>
+""" + foot()
+
+
+open(os.path.join(ROOT, "writing.html"), "w").write(writing_page())
 open(os.path.join(ROOT, "index.html"), "w").write(index_page())
 open(os.path.join(ROOT, "about.html"), "w").write(about_page())
 open(os.path.join(ROOT, "research", "baltimore-street-trees.html"), "w").write(trees_page())
