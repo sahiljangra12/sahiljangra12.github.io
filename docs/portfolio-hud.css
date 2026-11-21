@@ -1,0 +1,113 @@
+/* Standalone portfolio theme; isolated dashboards retain their validated presentation. */
+:root,:root[data-theme=dark]{
+  color-scheme:dark;
+  --background:oklch(0.12 0.015 265);--surface:oklch(0.17 0.028 265);
+  --ink:oklch(0.985 0 0);--muted:oklch(0.81 0.031 266);
+  --accent:oklch(0.88 0 0);--signal:var(--accent);
+  --mint:var(--accent);--amber:oklch(0.81 0.148 82);--coral:oklch(0.713 0.185 29);
+  --accent-soft:color-mix(in oklab,var(--accent) 5%,var(--background));
+  --line:color-mix(in oklab,var(--accent) 30%,transparent);
+  --dark:var(--background);--on-dark:var(--ink);--education-tint:var(--background);
+  --fieldwork-tint:var(--background);--cornflower:var(--accent);
+  --font-system:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-label:'JetBrains Mono',monospace;
+  --hud-glass:color-mix(in oklab,var(--surface) 70%,transparent);
+  --hud-border:color-mix(in oklab,var(--accent) 35%,transparent);
+  --hud-corner:color-mix(in oklab,var(--ink) 50%,transparent);
+  --hud-star:color-mix(in oklab,var(--ink) 13%,transparent);
+  --hud-shadow:inset 0 1px 0 color-mix(in oklab,var(--ink) 5%,transparent);
+  --hud-hover-shadow:inset 0 1px 0 color-mix(in oklab,var(--ink) 10%,transparent);
+  --editorial-rule:var(--line);--editorial-action:var(--accent);--editorial-hover:var(--accent-soft);
+  --layout-panel-border:var(--line);--image-rule:var(--hud-border);--image-surface:var(--surface);
+}
+html[data-theme] body{background:var(--background);color:var(--ink);font-family:var(--font-system);isolation:isolate}
+html[data-theme] body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(circle at 31px 47px,var(--hud-star) .7px,transparent 1px),radial-gradient(circle at 119px 173px,var(--hud-star) .6px,transparent 1px);background-size:233px 277px,349px 317px}
+html[data-theme] body::after{content:'';position:fixed;inset:0;z-index:180;pointer-events:none;background:radial-gradient(ellipse at center,transparent 62%,color-mix(in oklab,var(--background) 30%,transparent));}
+.hud-grain{position:fixed;inset:0;pointer-events:none;z-index:181;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E")}
+html[data-theme] body :is(h1,h2,h3,h4,.cine-title){font-family:var(--font-system)!important;font-weight:800!important;letter-spacing:0}
+html[data-theme] body :is(.eyebrow,.status,.cine-kicker,.study-tag,.sl-k,.small,.source,.figure-caption,.research-note,.page-bar .eyebrow){font-family:var(--font-label)!important;letter-spacing:0}
+html[data-theme] body :is(.eyebrow,.status,.cine-kicker,.study-tag){font-size:12px;line-height:1.65;text-transform:uppercase;color:var(--accent)}
+html[data-theme] body .eyebrow::before{content:'▸ ';color:var(--accent)}
+html[data-theme] body :is(.section-head h2,.detail>h1){font-weight:800}
+html[data-theme] body #nav{background:color-mix(in oklab,var(--background) 86%,transparent)!important;backdrop-filter:blur(12px)!important;border-bottom:1px solid var(--line)!important}
+html[data-theme] body #nav a[aria-current=true]{color:var(--accent);text-shadow:var(--hud-hover-shadow)}
+html[data-theme] body :is(.section,.research-section,.contact,.fieldwork-section){background:transparent!important;border-color:var(--line)}
+html[data-theme] body .section-head{position:relative;padding:24px 26px 32px;border-bottom:1px solid var(--line);}
+html[data-theme] body .section-head::before{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(var(--hud-corner),var(--hud-corner)) left top/18px 1px no-repeat,linear-gradient(var(--hud-corner),var(--hud-corner)) left top/1px 18px no-repeat,linear-gradient(var(--hud-corner),var(--hud-corner)) right top/18px 1px no-repeat,linear-gradient(var(--hud-corner),var(--hud-corner)) right top/1px 18px no-repeat,linear-gradient(var(--hud-corner),var(--hud-corner)) left bottom/18px 1px no-repeat,linear-gradient(var(--hud-corner),var(--hud-corner)) left bottom/1px 18px no-repeat,linear-gradient(var(--hud-corner),var(--hud-corner)) right bottom/18px 1px no-repeat,linear-gradient(var(--hud-corner),var(--hud-corner)) right bottom/1px 18px no-repeat}
+html[data-theme] body .section-head::after{content:'';position:absolute;bottom:0;right:32px;width:96px;height:6px;background:repeating-linear-gradient(90deg,var(--hud-border) 0 1px,transparent 1px 8px);pointer-events:none}
+html[data-theme] body .section-head h2{margin-top:12px}
+html[data-theme] body :is(.button,.cine-link,.icon-button,.cl,select){color:var(--ink)!important;border:1px solid var(--hud-border)!important;background:var(--hud-glass)!important;backdrop-filter:blur(12px);box-shadow:var(--hud-shadow)!important;border-radius:8px!important;transition:border-color .2s,box-shadow .2s,background .2s}
+html[data-theme] body :is(.button.primary,.cine-link){background:color-mix(in oklab,var(--accent) 12%,var(--hud-glass))!important;color:var(--accent)!important;border-color:var(--accent)!important}
+html[data-theme] body .cine-link{animation:hud-cta-entry 1.8s ease-out 2;min-height:48px}
+html[data-theme] body :is(.button,.cine-link,.icon-button,.cl,select):focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+html[data-theme] body .hero.wrap.cine{overflow:hidden!important;isolation:isolate}
+html[data-theme] body .hero.wrap.cine::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:repeating-linear-gradient(0deg,var(--ink) 0 1px,transparent 1px 5px);opacity:.025}
+html[data-theme] body .hero.wrap.cine::after{content:'';position:absolute;bottom:-65px;left:0;right:0;height:180px;z-index:-1;pointer-events:none;background:linear-gradient(90deg,var(--hud-border) 1px,transparent 1px),linear-gradient(var(--hud-border) 1px,transparent 1px);background-size:56px 32px;transform:perspective(280px) rotateX(56deg);transform-origin:bottom;mask-image:linear-gradient(transparent,var(--ink));opacity:.3}
+html[data-theme] body .cine-title em{color:var(--ink)!important;-webkit-text-fill-color:var(--ink)}
+html[data-theme] body .cine-title em::after{content:'_';color:var(--accent);-webkit-text-fill-color:var(--accent);animation:hud-cursor .7s step-end 4;opacity:0}
+/* Education uses real inset spacing, not the previous unframed text rules. */
+html[data-theme] body #education .edu{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px;align-items:start}
+html[data-theme] body #education .edu-card{height:auto;overflow:hidden;background:var(--hud-glass)!important;border:1px solid var(--hud-border)!important;border-radius:14px!important;backdrop-filter:blur(12px);box-shadow:var(--hud-shadow)}
+html[data-theme] body #education .edu-img{width:100%;height:auto;aspect-ratio:16/7;max-height:none;border-radius:0;border-bottom:1px solid var(--hud-border)}
+html[data-theme] body #education .edu-body{padding:30px!important;background:none!important;min-width:0}
+html[data-theme] body #education .edu-body :is(.panel-art,.rp-art){display:none!important}
+html[data-theme] body #education .edu-body h3{font-size:25px;font-weight:800;line-height:1.25;min-height:0;margin:16px 0 18px;overflow-wrap:break-word}
+html[data-theme] body #education .status{font-size:11px;display:flex;align-items:center;gap:8px}
+html[data-theme] body #education .status .dot{margin:0;flex-shrink:0;background:var(--accent);animation:none;box-shadow:none}
+html[data-theme] body #education .edu-meta{display:grid;gap:10px;margin:0 0 22px;padding:0 0 22px;border-bottom:1px solid var(--line);color:var(--muted);font-size:13px;line-height:1.6;}
+html[data-theme] body #education .edu-degree{display:block;color:var(--ink);font-size:16px;line-height:1.6;font-weight:600;min-height:52px}
+html[data-theme] body #education .edu-facts{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--muted);font-family:var(--font-label);font-size:11px}
+html[data-theme] body #education .edu-body>p{font-size:15px;color:var(--muted);line-height:1.8;margin:0 0 18px;max-width:none}
+html[data-theme] body #education .edu-body>p:last-of-type{margin-bottom:0}
+html[data-theme] body #education .tiss-course-details{margin-top:22px;padding-top:18px;border-color:var(--line)}
+html[data-theme] body #education .tiss-course-details summary{color:var(--accent);font-size:13px;line-height:1.65;min-height:44px;margin:0}
+html[data-theme] body #education .tiss-course-list{margin:12px 0 0;padding-left:18px;color:var(--muted)}
+html[data-theme] body #education .tiss-course-list li{font-size:13px;line-height:1.65;padding-block:8px}
+/* A single, full-width original supplied poster, with copy below rather than beside. */
+html[data-theme] body #research .research-preview:has(.clean-project-preview){grid-template-columns:minmax(0,1fr)!important;gap:32px!important;padding-block:28px 44px!important;border:0!important;border-bottom:1px solid var(--line)!important;overflow:visible;background:none!important}
+html[data-theme] body #research .clean-project-preview{grid-column:1!important;grid-row:1!important;order:0!important;border:1px solid var(--hud-border);border-radius:14px;box-shadow:var(--hud-shadow);width:100%;overflow:hidden}
+html[data-theme] body #research .clean-project-preview img{width:100%;height:auto;aspect-ratio:16/9;object-fit:contain;transition:transform .4s}
+html[data-theme] body #research .research-preview:has(.clean-project-preview) .research-preview-copy{grid-column:1;grid-row:2;order:1!important;max-width:900px!important;width:100%;}
+html[data-theme] body #research .research-preview h3{max-width:32ch;font-weight:800!important}
+html[data-theme] body #research .research-preview-copy>.eyebrow{color:var(--accent);font-size:12px}
+html[data-theme] body #research .research-preview-copy>p{color:var(--muted);font-size:16px!important}
+html[data-theme] body #research .tree-preview-takeaway{border-color:var(--amber);color:var(--muted)}
+html[data-theme] body #research .tree-preview-takeaway strong{color:var(--ink)}
+html[data-theme] body #research .study-tag{color:var(--accent);font-family:var(--font-label)}
+html[data-theme] body .new-badge{color:var(--background);background:var(--amber);border:0}
+html[data-theme] body #research .study-links{border-color:var(--line);gap:12px}
+html[data-theme] body #research .study-links .sl{background:var(--hud-glass)!important;border:1px solid var(--hud-border)!important;border-radius:8px!important;padding:12px 16px!important;min-height:52px;box-shadow:var(--hud-shadow);}
+html[data-theme] body #research .study-links .sl-k{color:var(--accent)}
+html[data-theme] body #research .study-index a{border-color:var(--line)!important}
+html[data-theme] body :is(.page,.page-bar){background:var(--background)}
+html[data-theme] body .writing-entry{border-color:var(--line)}
+@keyframes hud-cta-entry{0%,100%{filter:brightness(1)}50%{filter:brightness(1.2)}}
+@keyframes hud-cursor{0%,50%{opacity:1}51%,100%{opacity:0}}
+@media(hover:hover){html[data-theme] body :is(.button,.cine-link,.icon-button,.cl,.study-links .sl):hover{border-color:var(--accent)!important;box-shadow:var(--hud-hover-shadow)!important}html[data-theme] body a:hover{color:var(--accent)}html[data-theme] body #research .clean-project-preview:hover{box-shadow:var(--hud-hover-shadow)}html[data-theme] body #research .clean-project-preview:hover img{transform:scale(1.02)}}
+@media(max-width:960px){html[data-theme] body #education .edu{grid-template-columns:1fr;max-width:720px;margin-inline:auto}html[data-theme] body #education .edu-degree{min-height:0}html[data-theme] body #education .edu-img{aspect-ratio:16/6}}
+@media(max-width:760px){html[data-theme] body .section-head{padding:18px 14px 24px}html[data-theme] body .section-head::after{display:none}html[data-theme] body #education .edu-body{padding:24px!important}html[data-theme] body #education .edu-body h3{font-size:23px}html[data-theme] body #education .edu-img{aspect-ratio:16/8}html[data-theme] body #education .edu{gap:28px}html[data-theme] body #research .research-preview:has(.clean-project-preview){gap:24px!important}html[data-theme] body #research .clean-project-preview{order:0!important}html[data-theme] body #research .study-links .sl{padding:12px 14px!important}html[data-theme] body #nav .nav-links.open{background:var(--background)!important}html[data-theme] body .cine-kicker{font-size:10px}html[data-theme] body .hero.wrap.cine::after{height:120px}}
+@media(prefers-reduced-motion:reduce){html[data-theme] body *,html[data-theme] body *::before,html[data-theme] body *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}html[data-theme] body #research .clean-project-preview:hover img{transform:none}}
+/* Resource controls must outrank legacy first-child and phone-row rules. */
+html[data-theme] body main #research .study-links{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important;width:100%;max-width:none;align-items:stretch}
+html[data-theme] body main #research .study-links a.sl,
+html[data-theme] body main #research .study-links a.sl:is(:first-child,:last-child),
+html[data-theme] body .page .study-links a.sl{display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:flex-start!important;gap:8px!important;grid-template-columns:none!important;padding:16px 18px!important;min-width:0;min-height:84px;height:auto;border:1px solid var(--hud-border)!important;background:var(--hud-glass)!important;color:var(--ink)!important;box-shadow:var(--hud-shadow)!important;border-radius:8px!important}
+html[data-theme] body main #research .study-links a.sl :is(.sl-k,.sl-v),
+html[data-theme] body .page .study-links a.sl :is(.sl-k,.sl-v){width:100%;min-width:0;max-width:none!important;text-align:left!important;white-space:normal!important;overflow:visible!important;overflow-wrap:anywhere;line-height:1.55;letter-spacing:0}
+html[data-theme] body main #research .study-links a.sl .sl-k,
+html[data-theme] body .page .study-links a.sl .sl-k{color:var(--muted)!important;font-size:11px}
+html[data-theme] body main #research .study-links a.sl .sl-v,
+html[data-theme] body .page .study-links a.sl .sl-v{color:var(--ink)!important;font-size:14px;font-family:var(--font-system)!important}
+html[data-theme] body main #research .research-preview .research-note{font-family:var(--font-system)!important;font-size:13px;line-height:1.7;white-space:normal;overflow-wrap:anywhere;margin-top:16px;color:var(--muted)!important}
+/* Neutral interface accents; supplied posters and data colours remain original. */
+html[data-theme] body main :is(.button,.button.primary),
+html[data-theme] body .page :is(.button,.button.primary),
+html[data-theme] body .hero .cine-link{background:var(--hud-glass)!important;border:1px solid var(--hud-border)!important;color:var(--ink)!important;box-shadow:var(--hud-shadow)!important;animation:none}
+html[data-theme] body :is(.eyebrow,.status,.cine-kicker,.study-tag,.sl-k,.contact-email,.contact .eyebrow){color:var(--muted)!important;text-shadow:none!important}
+html[data-theme] body #research :is(.research-preview-copy>.eyebrow,.study-tag,.study-index a::after){color:var(--muted)!important}
+html[data-theme] body #research .study-index a::before{background:var(--muted)!important;box-shadow:none!important}
+html[data-theme] body #research .tree-preview-takeaway{border-color:var(--hud-border)!important}
+html[data-theme] body #research .new-badge{background:var(--ink)!important;color:var(--background)!important}
+html[data-theme] body :is(.dot,.dot.live){background:var(--muted)!important;box-shadow:none!important}
+html[data-theme] body main #research .study-links a.sl:hover{background:var(--surface)!important;border-color:var(--accent)!important;box-shadow:var(--hud-hover-shadow)!important}
+@media(max-width:960px){html[data-theme] body main #research .study-links{grid-template-columns:1fr!important}html[data-theme] body main #research .study-links a.sl{min-height:76px}}

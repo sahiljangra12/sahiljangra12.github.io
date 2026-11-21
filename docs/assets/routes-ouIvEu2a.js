@@ -1,0 +1,1 @@
+import{t as e}from"./index-CASBDoxC.js";import{t}from"./portfolio-src-BggxIjpS.js";var n=e();function r(){return(0,n.jsx)(`main`,{className:`h-screen overflow-hidden bg-background`,children:(0,n.jsx)(`iframe`,{className:`h-full w-full border-0`,src:t(),title:`Sahil — Data Science & Research`})})}export{r as component};

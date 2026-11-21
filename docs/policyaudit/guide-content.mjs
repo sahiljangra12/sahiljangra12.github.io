@@ -1,0 +1,18 @@
+export const fieldHelp = {
+  ct: 'Pick the column that records what actually happened to each person in the pilot: 1 means they received the treatment, 0 means they did not. Example: a column called "treated" with values 0 and 1. Do not pick your model’s recommendation here — the tool needs the real, random assignment.',
+  cy: 'Pick the column with the result you care about, measured after the pilot. Example: "recovered" (1 = got better, 0 = did not), or "test_score" (points gained). Everything else you enter — burden, tolerance — must be in the same units as this column.',
+  cs: 'Pick the column where your existing model says how much extra benefit each person gets from the treatment. Example: "predicted_benefit" = 0.20 means the model expects this person to gain 0.20 more if treated. A plain risk score or a predicted outcome is not enough — it must be the predicted extra benefit of treating.',
+  cost: 'How much "effort" treating one person costs, expressed in the same units as your outcome. Example: if the outcome is recovery probability and treating someone costs effort you judge worth 0.05 of recovery probability, enter 0.05. The policy treats a person only when their predicted benefit is larger than this number.',
+  tol: 'The largest average gain you are willing to miss out on by simply keeping your current policy. Example: 0.01 means "I will only switch if the improvement is clearly more than 0.01 per person." Decide this before looking at results — it is your bar for switching, not a statistical setting.',
+  pc: 'Pick the column that records the known chance each person had of being assigned to treatment in your randomized pilot. Example: a fair coin-flip design gives everyone 0.5. This must come from the design of the pilot, not from a model.',
+  alpha: 'How much risk of a wrong conclusion you accept. Smaller = more cautious. Example: 0.05 is the common choice; 0.01 is stricter. The tool also splits this allowance across the alternatives it tests and the checks you planned.',
+  looks: 'How many times you intend to peek at the results while the pilot is still growing. Example: if you plan to check after 500, 1,000 and 1,500 people, enter 3. Decide this in advance — checking many times with a single-check allowance makes results look stronger than they are.',
+  seed: 'A number that fixes the random shuffling used inside the analysis so you can reproduce the exact same result later. Keep it fixed; do not try different seeds until you get an answer you like.',
+};
+
+export function decisionHelp(decision) {
+  if (decision === 'Keep') return 'None of the tested updates beat your current policy by more than the bar you set. The practical advice: keep using your existing model in this setting, look at the checks below, and save the report for your records. This does not prove the model is perfect — only that the pilot found no supported improvement worth switching for.';
+  if (decision === 'Recalibrate') return 'One of the tested updates showed a supported average improvement, large enough to clear your bar, and it would change enough pilot decisions to matter. The practical advice: review the checks and assumptions below, save the report, and use the scoring option to get recommendations for new people similar to the pilot group.';
+  if (decision === 'Collect more') return 'The pilot is not yet big enough to say whether switching is worth it under your rule. The suggested total size is a rough planning number, not a promise. The practical advice: keep running the randomized pilot, plan your checks in advance, and audit again when more data arrives. Do not switch based on a provisional result.';
+  return '';
+}
