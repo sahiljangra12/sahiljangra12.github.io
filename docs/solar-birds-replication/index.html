@@ -5,7 +5,7 @@
 <meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Solar Policy and Bird Diversity: Replication and Evaluation</title>
-<meta name="description" content="Replication and evaluation of Zhang et al. (2026), China's solar expansion policy reduces bird diversity. All analyses in Stata, with plain-language interpretation.">
+<meta name="description" content="Replication and evaluation of Zhang et al. (2026), China's solar expansion policy reduces bird diversity. Stata analyses with live tools and page-level references.">
 <style>
 :root{
   --bg:#f6f7f9; --panel:#ffffff; --ink:#1b2330; --muted:#5b6676; --line:#dfe3ea;
@@ -96,6 +96,31 @@ pre{background:var(--code);padding:12px 14px;border-radius:8px;overflow-x:auto;l
   .two{grid-template-columns:1fr}
   h1{font-size:24px}
 }
+
+
+section.lab{border-top:4px solid var(--accent)}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.presets button{font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;font-size:13px;padding:6px 11px;border-radius:999px;border:1px solid var(--brand);background:transparent;color:var(--brand);cursor:pointer}
+.presets button:hover{background:var(--brand-soft)}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px 14px;margin:12px 0}
+.controls label,.slider label{display:flex;flex-direction:column;gap:4px;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.controls label.radio span{text-transform:none;letter-spacing:0;font-weight:400;font-size:14px;color:var(--ink)}
+.controls label.radio>span:first-child{text-transform:uppercase;letter-spacing:.04em;font-weight:600;font-size:12px;color:var(--muted)}
+select{font-size:15px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);text-transform:none;letter-spacing:0;font-weight:400;max-width:100%}
+.slider{margin:10px 0}.slider label{display:block;margin-bottom:8px}.slider input{display:block;margin-top:6px}.slider b{color:var(--accent);font-size:14px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.result{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:12px 0;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif}
+.result>div{border:1px solid var(--line);border-radius:8px;padding:10px 14px;background:var(--bg)}
+.result .big{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;border-left:4px solid var(--accent)}
+.result .big b{font-size:26px;color:var(--brand);font-variant-numeric:tabular-nums}
+.result .lbl,.result .kv span{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);display:block}
+.result .kv b{font-size:15px;font-variant-numeric:tabular-nums}
+.result .wide{grid-column:span 2}
+.notes{font-size:14.5px}
+svg{width:100%;height:auto;display:block;margin:10px 0;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif}
+a.ref{white-space:nowrap;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;font-size:13px;background:var(--brand-soft);padding:1px 7px;border-radius:999px;text-decoration:none}
+a.ref::after{content:" \2197"}
+@media(max-width:860px){.result .wide{grid-column:1/-1}}
 </style>
 </head>
 <body>
@@ -105,421 +130,369 @@ pre{background:var(--code);padding:12px 14px;border-radius:8px;overflow-x:auto;l
   <div class="sub">Replication and evaluation</div>
   <div class="grp">Start here</div>
   <a href="#top">Overview</a>
-  <a href="#verdict">Verdict at a glance</a>
-  <a href="#qa">Questions answered</a>
-  <div class="grp">The analysis</div>
-  <a href="#data">1. Paper and data</a>
-  <a href="#main">2. Main estimate</a>
-  <a href="#effort">3. Birds or birdwatching?</a>
-  <a href="#area">4. Solar-plant area</a>
-  <a href="#sens">5. Sensitivity</a>
-  <a href="#iv">6. Instrumental variable</a>
-  <a href="#did">7. Staggered DiD</a>
-  <a href="#dcdh">8. dCDH estimators</a>
+  <a href="#record">Project record</a>
+  <a href="#claims">Paper claims, checked</a>
+  <div class="grp">Try it yourself</div>
+  <a href="#lab-spec">A. Change the model</a>
+  <a href="#lab-sens">B. Add a confounder</a>
+  <a href="#lab-iv">C. Relax the IV assumption</a>
+  <div class="grp">Evidence</div>
+  <a href="#main">1. Main estimate</a>
+  <a href="#effort">2. Birds or birdwatching?</a>
+  <a href="#area">3. Solar-plant area</a>
+  <a href="#iv">4. Instrumental variable</a>
+  <a href="#did">5. Staggered DiD</a>
+  <a href="#dcdh">6. dCDH estimators</a>
   <div class="grp">Wrap-up</div>
+  <a href="#qa">Questions answered</a>
   <a href="#conclusion">Conclusion and limits</a>
-  <a href="#repro">Code and reports</a>
+  <a href="#repro">Code, data and reports</a>
   <a href="#glossary">Glossary</a>
   <button id="themeBtn" type="button">Dark mode</button>
 </nav>
 
 <main>
 <header class="hero" id="top">
-  <div class="kicker">Replication and evaluation &middot; updated 20 November 2026</div>
+  <div class="kicker">Replication and evaluation &middot; updated 21 November 2026</div>
   <h1>Does China's solar expansion policy reduce bird diversity?</h1>
-  <p>A replication and evaluation of Zhang et al. (2026), <i>&ldquo;China's solar expansion policy reduces bird diversity&rdquo;</i>, <i>Science</i> 393, 831. Work by Sahil (research assistant) for Prof. Paul J. Ferraro, Johns Hopkins University. Every estimate on this page was produced in Stata from the authors' data and code.</p>
+  <p>A replication and evaluation of Zhang et al. (2026), <i>Science</i> 393, 831 (<a href="https://doi.org/10.1126/science.aee0747" target="_blank" rel="noopener">doi:10.1126/science.aee0747</a>). Work by Sahil, research assistant to Prof. Paul J. Ferraro, Johns Hopkins University. Every number on this page comes from Stata, run on the authors' data.</p>
   <div class="box verdict"><b class="h">Short answer</b>
-  The paper's numbers reproduce exactly. But the evidence does not establish that solar policy reduced birds. The data cannot separate &ldquo;policy reduces birds&rdquo; from &ldquo;policy is related to where and how much people record birds&rdquo;. Our results also do not show that solar development is harmless.</div>
+  The paper's numbers reproduce exactly. The evidence does not establish that solar policy reduced birds: the data cannot separate &ldquo;policy reduces birds&rdquo; from &ldquo;policy is related to where and how much people record birds&rdquo;. Our results do not show that solar development is harmless either.</div>
   <div class="stats">
-    <div class="stat"><b>&minus;0.0125</b><span>Paper's main estimate (Shannon per PSI point). Reproduced exactly.</span></div>
+    <div class="stat"><b>&minus;0.0125</b><span>Paper's main estimate. Reproduced exactly.</span></div>
     <div class="stat"><b>&minus;0.0027</b><span>Same estimate in a fair comparison (p &asymp; 0.5).</span></div>
     <div class="stat"><b>83% vs 1%</b><span>Urban vs rural county-months with PSI filled in as 0.</span></div>
     <div class="stat"><b>2.2%</b><span>Confounder strength that brings the estimate to zero.</span></div>
-    <div class="stat"><b>&minus;0.126 &rarr; &minus;0.042</b><span>IV estimate after allowing for the instrument's direct effect.</span></div>
+    <div class="stat"><b>792</b><span>Stata regressions behind the live tools on this page.</span></div>
   </div>
-  <p style="margin-bottom:0"><a class="btn" href="reports/Final_Report.pdf">Full report (PDF, 15 pages)</a><a class="btn alt" href="reports/dCDH_Report.pdf">dCDH report (PDF)</a><a class="btn alt" href="#repro">Stata code</a></p>
+  <p class="small" style="margin-bottom:0">Context: on 1 October 2026 <i>Science</i> posted an Editor's Note saying eLetters had raised technical concerns about the paper and that these were being evaluated (<a href="https://doi.org/10.1126/science.aem4102" target="_blank" rel="noopener">doi:10.1126/science.aem4102</a>).</p>
 </header>
 
-<section id="verdict">
-  <h2>Verdict at a glance</h2>
-  <p class="lead">Each row is one piece of evidence. The last column says whether it supports the claim that solar policy harms birds.</p>
+<section id="record">
+  <h2>Project record</h2>
+  <p class="lead">Everything done, in order. Each step links to its own report and code.</p>
   <div class="tablewrap"><table>
-    <tr><th>Evidence</th><th>What it shows</th><th>Supports harm?</th><th></th></tr>
-    <tr><td>Paper's TWFE regression</td><td>&minus;0.0125, significant</td><td><span class="tag yes">Yes</span></td><td><a href="#main">details</a></td></tr>
-    <tr><td>TWFE in fair comparisons</td><td>About &minus;0.003, not significant</td><td><span class="tag no">No</span></td><td><a href="#main">details</a></td></tr>
-    <tr><td>Birdwatching effort and missing months</td><td>PSI is linked to less observation, through the urban&ndash;rural split</td><td><span class="tag mid">Undermines</span></td><td><a href="#effort">details</a></td></tr>
-    <tr><td>Sensitivity analysis</td><td>A weak confounder (2.2%) overturns the estimate</td><td><span class="tag mid">Fragile</span></td><td><a href="#sens">details</a></td></tr>
-    <tr><td>Instrumental variable</td><td>Significant, but the exclusion restriction fails; corrected &minus;0.042, not significant</td><td><span class="tag mid">Weak</span></td><td><a href="#iv">details</a></td></tr>
-    <tr><td>Staggered DiD (binary adoption)</td><td>+0.02 to +0.08, not significant</td><td><span class="tag no">No</span></td><td><a href="#did">details</a></td></tr>
-    <tr><td>dCDH (PSI as a dose)</td><td>&minus;0.03 to &minus;0.05; not significant with controls in fair samples; effort pre-trends fail</td><td><span class="tag mid">Partly</span></td><td><a href="#dcdh">details</a></td></tr>
-    <tr><td>Solar-plant area</td><td>Negative in TWFE; disappears holding effort fixed; dCDH not significant</td><td><span class="tag mid">Unclear</span></td><td><a href="#area">details</a></td></tr>
+    <tr><th>Step</th><th>Question</th><th>What was done</th><th>Result</th><th>Report</th></tr>
+    <tr><td><b>Task 1</b><br>Replication</td><td>Do the results reproduce? What is the data structure and estimand?</td><td>Ran the authors' code; rebuilt the sample; TWFE diagnostics; IV exclusion tests</td><td>12 of 12 numbers match. Main estimate falls to &minus;0.0027 in fair comparisons</td><td><a href="reports/Task1_Report.pdf">PDF</a></td></tr>
+    <tr><td><b>Task 2</b><br>Sensitivity</td><td>How much hidden confounding would overturn it?</td><td>Cinelli&ndash;Hazlett analysis with <code>sensemakr</code></td><td>2.2% is enough</td><td><a href="reports/Task2_Report.pdf">PDF</a></td></tr>
+    <tr><td><b>Task 3</b><br>Staggered DiD</td><td>Does TWFE mislead under staggered timing?</td><td>Callaway&ndash;Sant'Anna, BJS, Sun&ndash;Abraham</td><td>+0.02 to +0.08, not significant</td><td><a href="reports/Task3_Report.pdf">PDF</a></td></tr>
+    <tr><td><b>13 Nov</b><br>Follow-ups</td><td>Effort, missing months, solar area, weak instrument</td><td>Effort outcomes; full county &times; month grid; Area as treatment; Anderson&ndash;Rubin sets</td><td>PSI linked to less observation; Area effect vanishes holding effort fixed; IV fails on exclusion</td><td><a href="reports/Followup_Report.pdf">PDF</a></td></tr>
+    <tr><td><b>19 Nov</b><br>Follow-ups</td><td>Residualized sensitivity; dCDH estimators; birdwatcher variable; Area data</td><td>FWL residualization; <code>did_multiplegt_dyn</code> and <code>_stat</code>; data checks</td><td>dCDH &minus;0.03 to &minus;0.05, weaker with controls; effort pre-trends fail</td><td><a href="reports/Followup2_Nov19.pdf">PDF</a> &middot; <a href="reports/dCDH_Report.pdf">dCDH</a></td></tr>
+    <tr><td><b>20&ndash;21 Nov</b><br>Synthesis</td><td>One consolidated account; let a reader test alternatives</td><td>Final report; 792-regression grid for this page</td><td>See below</td><td><a href="reports/Final_Report.pdf">PDF</a></td></tr>
   </table></div>
 </section>
 
-<section id="qa">
-  <h2>Questions answered</h2>
-  <p class="lead">Questions raised in the project meetings, each with a direct answer. Type to filter.</p>
-  <input type="search" id="qsearch" placeholder="Filter questions, e.g. IV, birdwatchers, area, dCDH" aria-label="Filter questions">
-  <div id="qlist">
-  <details><summary>Do the paper's results reproduce?</summary><div>
-    <p>Yes. Running the authors' code with only file paths changed reproduces all 12 numbers we checked, to four decimals. The main estimate is &minus;0.0125283 (county-clustered SE 0.0036551), with 46,371 county-months and 2,344 counties.</p></div></details>
+<section id="claims">
+  <h2>Paper claims, checked</h2>
+  <p class="lead">Each claim links to the exact page of the paper or its Supplementary Materials (SM). Links open the publisher's PDF at that page.</p>
+  <div class="tablewrap"><table>
+    <tr><th>The paper says</th><th>Where</th><th>What we find</th></tr>
+    <tr><td>One more PSI point lowers Shannon by 0.0125 (N = 46,371)</td><td><a class="ref" data-src="main" data-p="832">Table 1, p. 832</a></td><td>Reproduces exactly. Falls to &minus;0.0027 (p &asymp; 0.5) in fair comparisons. <a href="#main">&rarr;</a></td></tr>
+    <tr><td>Bird data come from a citizen-science platform (China Birdreport)</td><td><a class="ref" data-src="main" data-p="832">p. 832</a>; <a class="ref" data-src="sm" data-p="2">SM p. 2</a></td><td>Records are opportunistic. Their volume is related to PSI. <a href="#effort">&rarr;</a></td></tr>
+    <tr><td>Observer effort is handled by the control <i>Duration</i> (birding time per birdwatcher)</td><td><a class="ref" data-src="main" data-p="832">p. 832</a>; <a class="ref" data-src="sm" data-p="24">Table S1, SM p. 24</a></td><td>&ldquo;Number of birdwatchers&rdquo; is a count of records, not people. Effort is never an outcome. <a href="#effort">&rarr;</a></td></tr>
+    <tr><td>Results hold after dropping the bottom 20/10/5/3% of county-months by record count</td><td><a class="ref" data-src="sm" data-p="15">SM p. 15</a>; <a class="ref" data-src="sm" data-p="44">Table S14, SM p. 44</a></td><td>The table keeps 7,954 to 26,918 rows: 17&ndash;58% of the sample, not 80&ndash;97%.</td></tr>
+    <tr><td>PSI correlates positively with solar-plant area (r = 0.041)</td><td><a class="ref" data-src="main" data-p="833">p. 833</a>; <a class="ref" data-src="sm" data-p="12">SM p. 12</a>; <a class="ref" data-src="sm" data-p="21">Fig. S2, SM p. 21</a></td><td>That is across counties. Within a county over time the relation is negative. <a href="#area">&rarr;</a></td></tr>
+    <tr><td>Instrument: ln(sunshine, 1984&ndash;2013) &divide; city climate-policy uncertainty</td><td><a class="ref" data-src="main" data-p="833">p. 833</a>; <a class="ref" data-src="sm" data-p="8">SM p. 8</a></td><td>The data label says 1994&ndash;2023. The instrument also has a direct effect. <a href="#iv">&rarr;</a></td></tr>
+    <tr><td>IV estimate &minus;0.1264</td><td><a class="ref" data-src="sm" data-p="9">SM p. 9</a>; <a class="ref" data-src="sm" data-p="33">Table S7, SM p. 33</a></td><td>Reproduces. Becomes &minus;0.042, not significant, once the direct effect is allowed. <a href="#lab-iv">&rarr;</a></td></tr>
+    <tr><td>Instrument validity tests</td><td><a class="ref" data-src="sm" data-p="38">Table S10, SM p. 38</a></td><td>The reported F of about 8 is the joint F of all regressors. The instrument's own F there is 49.</td></tr>
+    <tr><td>Propensity-score matching confirms the result</td><td><a class="ref" data-src="sm" data-p="11">SM p. 11</a>; <a class="ref" data-src="sm" data-p="40">Table S11, SM p. 40</a></td><td>The matching weights are not applied. With them: about &minus;0.005, not significant.</td></tr>
+    <tr><td>Solar-plant area also lowers Shannon</td><td><a class="ref" data-src="sm" data-p="13">SM p. 13</a>; <a class="ref" data-src="sm" data-p="41">Table S12, SM p. 41</a></td><td>&minus;0.0387 reproduces. It vanishes holding birdwatcher records fixed. <a href="#area">&rarr;</a></td></tr>
+    <tr><td>Data sources, including plant capacity</td><td><a class="ref" data-src="sm" data-p="26">Table S2, SM p. 26</a></td><td>Area is missing for 1,184 counties and set to 0; only 473 of them also lack PSI.</td></tr>
+  </table></div>
+  <p class="small">Page numbers were checked against the published PDFs: journal pages for the article, PDF pages for the SM. The article may need a journal subscription.</p>
+</section>
 
-  <details><summary>Why does the main estimate shrink in a &ldquo;fair comparison&rdquo;?</summary><div>
-    <p>PSI is missing for 724 counties and the authors set it to 0. These are almost all urban districts: 694 of 847 urban districts, against 9 of 1,497 rural counties. So the regression mostly compares rural counties (with PSI) against urban districts (PSI = 0).</p>
-    <p>Urban and rural areas had very different trends in birdwatching. When urban is compared with urban and rural with rural, or when only counties with real PSI are used, the estimate is &minus;0.0027 (p &asymp; 0.5).</p></div></details>
-
-  <details><summary>What exactly does &ldquo;83% of urban county-months have imputed PSI&rdquo; mean?</summary><div>
-    <p>Of all urban county-months in the regression, 83.1% belong to counties whose PSI was missing and filled in as 0. For rural county-months the share is 1.2%. Urban rows are 52% of the sample.</p>
-    <p>The sample using only real PSI drops 20,364 rows, and 98.7% of those are urban. What remains is essentially a rural sample (15.8% urban).</p></div></details>
-
-  <details><summary>Where does the paper analyze the number of birdwatchers, and why?</summary><div>
-    <ul><li><b>Where:</b> only inside the control variable <i>Duration</i> (log birding hours per birdwatcher). No table uses birdwatching as an outcome.</li>
-    <li><b>What the variable is:</b> in the authors' file, &ldquo;number of birdwatchers&rdquo; is a <i>count of submitted records</i> per county-month. One person submitting three outings counts three times. It measures checklists, not unique people.</li>
-    <li><b>Table S14:</b> the paper's effort check drops county-months with few records. It says it drops the bottom 20/10/5/3%, but it keeps only 17&ndash;58% of the sample.</li></ul></div></details>
-
-  <details><summary>Is there evidence that birding grew faster in cities?</summary><div>
-    <p>Yes. On the full county &times; month grid, the share of months with any record grew 2.3 percentage points per year faster in urban districts than in rural counties. The log number of records grew 0.060 per year faster. Both p &lt; 0.001.</p></div></details>
-
-  <details><summary>Does PSI predict less birdwatching?</summary><div>
-    <p>In the paper's design, yes: one more PSI point goes with 4.1% fewer records and a 0.55 percentage-point lower chance that a month is observed at all. In fair comparisons both links disappear. Holding ln(records) fixed, the PSI effect on Shannon is +0.003 (p = 0.31).</p></div></details>
-
-  <details><summary>How little confounding would overturn the result?</summary><div>
-    <p>A confounder explaining 2.16% of the leftover variation in both PSI and Shannon brings the estimate to zero. 1.24% makes it insignificant. A confounder three times as strong as Duration makes it insignificant, and four times brings it to zero. With urban &times; year-month effects, twice Duration is enough.</p></div></details>
-
-  <details><summary>Why did the first sensitivity run &ldquo;fail&rdquo;, and how was it fixed?</summary><div>
-    <p>The version with explicit county dummies needs 2,344 dummy variables. Stata/BE allows 2,048, so it stops with error r(907). The fix is residualization: remove the fixed effects from the outcome, the treatment and every control first, then run <code>sensemakr</code> on the residuals. This gives exactly the paper's coefficient (&minus;0.0125283).</p></div></details>
-
-  <details><summary>Is the instrument weak?</summary><div>
-    <p>It depends on clustering. The instrument's F is 30.2 with county clusters (passes the 23.1 benchmark), 10.8 with city clusters and 2.8 with province clusters (both fail). The &ldquo;F &asymp; 8&rdquo; in Table S10 is the joint F of all ten regressors, not the instrument's strength.</p>
-    <p>But weakness is not the main problem. Anderson&ndash;Rubin confidence sets, which stay valid with weak instruments, still exclude zero.</p></div></details>
-
-  <details><summary>What is the plausibly-exogenous IV step, and is it valid?</summary><div>
-    <p><b>Idea.</b> IV assumes the instrument affects birds <i>only</i> through PSI. In the 724 counties where PSI is fixed at 0, the instrument cannot move PSI. If it still moves Shannon there, that is a direct effect.</p>
-    <p><b>Result.</b> It does: &minus;0.00214 (p = 0.048). Subtracting this direct effect (Conley, Hansen &amp; Rossi 2012; van Kippersluis &amp; Rietveld 2018) cuts the IV estimate from &minus;0.126 to &minus;0.042, which is not significant.</p>
-    <p><b>Is it valid?</b> As a sensitivity check, yes. As a corrected estimate, no: the direct effect is measured in mostly urban counties and may differ elsewhere. It shows the IV conclusion depends on an assumption the data contradict.</p></div></details>
-
-  <details><summary>Where does the solar-area data come from? Are zeros real? Is it missing for the same counties as PSI?</summary><div>
-    <ul><li><b>Source:</b> licensed power plants from the National Energy Administration. Area = installed capacity converted to km&sup2;.</li>
-    <li><b>True zeros:</b> yes. The capacity file has 11,699 county-years with a real zero, so counties with no plants can be told apart from missing counties.</li>
-    <li><b>Missing:</b> 1,184 counties are missing from the capacity file and set to 0. Only 473 of them are also missing PSI. So it is a different and larger set, and missing data do not explain choosing PSI over Area.</li></ul></div></details>
-
-  <details><summary>Which staggered DiD estimators were run?</summary><div>
-    <p>Callaway &amp; Sant'Anna, Sun &amp; Abraham, and Borusyak, Jaravel &amp; Spiess (binary adoption), and both de Chaisemartin &amp; D'Haultf&oelig;uille packages (PSI as a dose). See <a href="#did">section 7</a> and <a href="#dcdh">section 8</a>.</p></div></details>
-
-  <details><summary>What do the de Chaisemartin &amp; D'Haultf&oelig;uille estimators show?</summary><div>
-    <p>A negative effect: &minus;0.055 (SE 0.018) per PSI point, with Shannon pre-trend tests passing. It stays negative within urban/rural (&minus;0.041) and in real-PSI counties (&minus;0.037). With the paper's nine controls it is &minus;0.024 to &minus;0.029 and not significant in the fair samples. The pre-trend test on birdwatching records fails (p = 0.001).</p></div></details>
-
-  <details><summary>Why do dCDH and the binary estimators disagree?</summary><div>
-    <p>They estimate different things. The binary estimators measure the effect of adopting <i>any</i> policy for the first time, in counties untreated in 2014. dCDH measures the effect of <i>more</i> policy, and also uses later increases in the 838 counties already treated in 2014. That is where most PSI variation is.</p></div></details>
-
-  <details><summary>Was the &ldquo;no stayers&rdquo; dCDH method (AEA P&amp;P 2024) used?</summary><div>
-    <p>No, because its design does not fit. It needs all units untreated at the start and one common adoption date. Here 838 counties already have PSI &gt; 0 in 2014, PSI changes in different years, and about 74% of year-to-year steps are &ldquo;stayers&rdquo;. The stayers-based estimator (<code>did_multiplegt_stat</code>) was used instead.</p></div></details>
-
-  <details><summary>What could not be run, and why?</summary><div>
-    <ul><li><code>did_multiplegt_dyn</code> with <code>controls()</code>: stops in Stata/BE (variable limit). Replaced by a covariate-adjusted outcome.</li>
-    <li><code>continuous(1)</code> with bootstrap: ran over 12 minutes without finishing.</li>
-    <li>Explicit-dummy sensitivity: exceeds the 2,048-variable limit. Replaced by residualization.</li></ul>
-    <p>All three can be run in Stata/MP or R.</p></div></details>
-
-  <details><summary>Can everything be run from one file?</summary><div>
-    <p>Yes: <code>run_everything.do</code>. See <a href="#repro">Code and reports</a>.</p></div></details>
+<section id="lab-spec" class="lab">
+  <div class="kicker">Try it yourself &middot; A</div>
+  <h2>Change the model</h2>
+  <p class="lead"><b>Why this is here.</b> The paper's conclusion rests on one specification. This tool shows what happens under any other reasonable one. Every result is a real Stata regression, run in advance (792 in total).</p>
+  <div class="presets">
+    <button type="button" data-preset='{}'>Paper's specification</button>
+    <button type="button" data-preset='{"fe":"f2"}'>Fair comparison (urban &times; month)</button>
+    <button type="button" data-preset='{"smp":"realpsi"}'>Real PSI only</button>
+    <button type="button" data-preset='{"ctrl":"c2"}'>Hold effort fixed</button>
+    <button type="button" data-preset='{"y":"lnBN"}'>Effort as the outcome</button>
+    <button type="button" data-preset='{"d":"Area"}'>Solar area as treatment</button>
   </div>
+  <div class="controls">
+    <label>Outcome<select id="s_y"></select></label>
+    <label>Treatment<select id="s_d"></select></label>
+    <label>Fixed effects<select id="s_fe"></select></label>
+    <label>Sample<select id="s_smp"></select></label>
+    <label>Controls<select id="s_ctrl"></select></label>
+    <label>Standard errors clustered by<select id="s_cl"></select></label>
+  </div>
+  <div class="result">
+    <div class="big"><span class="lbl">Estimate</span><b id="r_b"></b><span id="r_tag" class="tag"></span></div>
+    <div class="kv"><span>Std. error</span><b id="r_se"></b></div>
+    <div class="kv"><span>95% interval</span><b id="r_ci"></b></div>
+    <div class="kv"><span>p-value</span><b id="r_p"></b></div>
+    <div class="kv wide"><span>Sample</span><b id="r_n"></b></div>
+  </div>
+  <ul id="r_notes" class="notes"></ul>
+  <p class="small" id="r_base"></p>
+  <pre id="r_cmd" title="The Stata command behind this result"></pre>
+  <svg id="curve" viewBox="0 0 900 300" role="img" aria-label="Specification curve"></svg>
+  <p id="curveSum"></p>
 </section>
 
-<section id="data">
-  <h2>1. The paper and its data</h2>
-  <div class="box"><b class="h">The paper's claim</b>Counties with stricter solar-promotion policy have lower bird diversity. One more point of the Policy Stringency Index (PSI) lowers the Shannon index by 0.0125. An instrumental-variable estimate gives &minus;0.126.</div>
-  <ul>
-    <li><b>Unit:</b> county-month, 2014&ndash;2023.</li>
-    <li><b>Outcome:</b> Shannon diversity of birds recorded on China Birdreport, a citizen-science platform. These are opportunistic records, not standardized surveys.</li>
-    <li><b>Treatment (PSI):</b> policy documents promoting solar, scored by how binding they are and summed per county-year (0 to 15.5). Missing for 724 of 2,501 counties and set to 0.</li>
-    <li><b>Controls:</b> temperature, wind, population density, carbon emissions, four land-use shares, and Duration (log hours per birdwatcher).</li>
-    <li><b>Very unbalanced panel:</b> the median county is observed in 11 of 120 months. Observed rows are about 14% of all possible county-months.</li>
-  </ul>
-  <h3>Sample flow</h3>
-  <div class="tablewrap"><table>
-    <tr><th>Step</th><th class="n">County-months</th><th class="n">Counties</th></tr>
-    <tr><td>Possible (2,778 counties &times; 120 months)</td><td class="n">333,360</td><td class="n">2,778</td></tr>
-    <tr><td>At least one bird record</td><td class="n">48,900</td><td class="n">2,561</td></tr>
-    <tr><td>No missing control</td><td class="n">46,528</td><td class="n">2,501</td></tr>
-    <tr><td>Regression sample (one-row counties dropped)</td><td class="n">46,371</td><td class="n">2,344</td></tr>
-    <tr><td>IV sample</td><td class="n">37,503</td><td class="n">2,077</td></tr>
-  </table></div>
-  <h3>Four different questions</h3>
-  <p>The methods on this page do not all estimate the same quantity, so their numbers need not match.</p>
-  <ul>
-    <li><b>TWFE (paper):</b> change in Shannon per PSI point within counties, relative to common monthly shocks.</li>
-    <li><b>IV:</b> effect per PSI point for counties whose policy responds to the instrument.</li>
-    <li><b>Binary staggered DiD:</b> effect of adopting any solar policy for the first time.</li>
-    <li><b>dCDH:</b> effect per PSI point of the changes counties actually experienced, against counties at the same starting PSI that did not change.</li>
-  </ul>
+<section id="lab-sens" class="lab">
+  <div class="kicker">Try it yourself &middot; B</div>
+  <h2>Add a hidden confounder</h2>
+  <p class="lead"><b>Why this is here.</b> No study controls for everything. This tool asks how strong an unmeasured confounder must be to change the conclusion (Cinelli &amp; Hazlett 2020). The formulas are exact and reproduce Stata's <code>sensemakr</code> output.</p>
+  <div class="controls">
+    <label>Starting model<select id="sens_spec"><option value="paper">Paper's specification</option><option value="urbym">Urban &times; year-month effects</option><option value="realpsi">Real PSI only</option></select></label>
+    <label class="radio"><span>How to set the confounder</span>
+      <span><input type="radio" name="sens_mode" value="k" checked> As a multiple of Duration, the paper's effort control</span>
+      <span><input type="radio" name="sens_mode" value="f"> Freely</span></label>
+  </div>
+  <div id="sens_kwrap" class="slider"><label>Confounder strength: <b id="sens_kv"></b> Duration<input type="range" id="sens_k" min="0" max="6" step="0.1" value="3"></label></div>
+  <div id="sens_fwrap" class="slider" style="display:none">
+    <label>Share of leftover PSI variation explained: <b id="sens_dv"></b><input type="range" id="sens_d" min="0" max="1.2" step="0.01" value="0.2"></label>
+    <label>Share of leftover Shannon variation explained: <b id="sens_yv"></b><input type="range" id="sens_y" min="0" max="60" step="0.5" value="12"></label>
+  </div>
+  <div class="result">
+    <div class="big"><span class="lbl">Estimate with this confounder</span><b id="sens_est"></b><span id="sens_tag" class="tag"></span></div>
+    <div class="kv"><span>Starting estimate</span><b id="sens_b0"></b></div>
+    <div class="kv"><span>Strength that brings it to zero</span><b id="sens_rv"></b></div>
+    <div class="kv"><span>Strength that makes it insignificant</span><b id="sens_rva"></b></div>
+    <div class="kv wide"><span>This confounder explains</span><b id="sens_pt"></b></div>
+  </div>
+  <svg id="sensmap" viewBox="0 0 900 320" role="img" aria-label="Sensitivity map"></svg>
+  <p class="small">The orange dot is your confounder. Diamonds mark confounders 1 to 5 times as strong as Duration. Duration explains 4% of leftover Shannon variation but only 0.06% of leftover PSI variation. Standard errors here are the unclustered ones the method uses.</p>
+</section>
+
+<section id="lab-iv" class="lab">
+  <div class="kicker">Try it yourself &middot; C</div>
+  <h2>Relax the instrument's key assumption</h2>
+  <p class="lead"><b>Why this is here.</b> The IV estimate is valid only if the instrument affects birds through PSI alone. In counties where PSI is fixed at 0, the instrument still moves Shannon. This tool shows the IV estimate for any assumed direct effect (Conley, Hansen &amp; Rossi 2012). Each point is a 2SLS regression re-run in Stata.</p>
+  <div class="controls">
+    <label>Standard errors clustered by<select id="iv_cl"><option value="county">County (paper)</option><option value="city">City (level of the policy-uncertainty shock)</option></select></label>
+  </div>
+  <div class="slider"><label>Assumed direct effect of the instrument: <b id="iv_gv"></b><input type="range" id="iv_g" min="0" max="33" step="1"></label>
+    <div class="presets"><button type="button" data-g="0">Paper's assumption (0)</button><button type="button" data-g="hat">Estimated direct effect</button><button type="button" data-g="lo">Lower end of its 95% interval</button></div></div>
+  <div class="result">
+    <div class="big"><span class="lbl">IV estimate</span><b id="iv_b"></b><span id="iv_tag" class="tag"></span></div>
+    <div class="kv"><span>Std. error</span><b id="iv_se"></b></div>
+    <div class="kv"><span>95% interval</span><b id="iv_ci"></b></div>
+    <div class="kv"><span>Instrument F</span><b id="iv_f"></b></div>
+  </div>
+  <p class="small" id="iv_share"></p>
+  <svg id="ivchart" viewBox="0 0 900 300" role="img" aria-label="IV estimate by assumed direct effect"></svg>
+  <p class="small">Intervals here are the usual 2SLS ones. Weak-instrument-robust (Anderson&ndash;Rubin) sets are in <a href="#iv">section 4</a>. The direct effect is estimated in mostly urban counties, so treat this as a sensitivity check, not a corrected estimate.</p>
 </section>
 
 <section id="main">
-  <h2>2. The main estimate</h2>
-  <p class="lead">It reproduces exactly. It does not survive a fair comparison.</p>
+  <h2>1. The main estimate</h2>
+  <p class="lead">It reproduces exactly. It does not survive a fair comparison. Paper: <a class="ref" data-src="main" data-p="832">Table 1, p. 832</a>.</p>
   <div class="tablewrap"><table>
     <tr><th>Specification</th><th class="n">PSI effect</th><th class="n">SE</th><th class="n">p</th></tr>
     <tr><td>Paper: county + year-month fixed effects</td><td class="n">&minus;0.0125</td><td class="n">0.0037</td><td class="n">&lt;0.001</td></tr>
     <tr><td>Urban &times; year-month fixed effects</td><td class="n">&minus;0.0027</td><td class="n">0.0037</td><td class="n">0.47</td></tr>
     <tr><td>Only counties with real PSI data</td><td class="n">&minus;0.0027</td><td class="n">0.0038</td><td class="n">0.49</td></tr>
-    <tr><td>Province &times; year-month fixed effects</td><td class="n">&minus;0.0146</td><td class="n"></td><td class="n"></td></tr>
-    <tr><td>Cumulative PSI (policy stock)</td><td class="n">&minus;0.0012</td><td class="n"></td><td class="n">0.58</td></tr>
+    <tr><td>Province &times; year-month fixed effects</td><td class="n">&minus;0.0146</td><td class="n">0.0047</td><td class="n">0.002</td></tr>
     <tr><td>Matching, with the matching weights applied</td><td class="n">about &minus;0.005</td><td class="n"></td><td class="n">n.s.</td></tr>
   </table></div>
-  <div class="box why"><b class="h">Why this happens</b>
+  <div class="box why"><b class="h">Why</b>
   <ul>
-    <li><b>Who is missing.</b> The 724 counties with PSI set to 0 are almost all urban districts.</li>
-    <li><b>What that does.</b> The regression compares rural counties with PSI against urban districts with PSI = 0.</li>
-    <li><b>Why it is unfair.</b> Birdwatching grew much faster in cities. Rural counties then look &ldquo;worse&rdquo; over time, and PSI picks that up.</li>
-    <li><b>The checks.</b> Giving urban and rural areas their own monthly shocks, or dropping the filled-in zeros, removes about 80% of the effect.</li>
+    <li>PSI is missing for 724 of 2,501 counties and set to 0. They are 694 of 847 urban districts but only 9 of 1,497 rural counties.</li>
+    <li>So 83.1% of urban county-months have filled-in PSI, against 1.2% of rural ones. The regression mostly compares rural counties with urban districts.</li>
+    <li>Birdwatching grew much faster in cities. Separate urban and rural monthly shocks, or dropping the filled-in zeros, remove about 80% of the effect.</li>
   </ul></div>
 </section>
 
 <section id="effort">
-  <h2>3. Is the outcome measuring birds or birdwatching?</h2>
-  <p class="lead">Shannon rises with effort: more observers and more hours find more species. If high-PSI places are observed less, they look less diverse even with the same birds.</p>
-  <h3>Does PSI change effort?</h3>
+  <h2>2. Is the outcome measuring birds or birdwatching?</h2>
+  <p class="lead">Shannon rises with effort. If high-PSI places are observed less, they look less diverse with the same birds. Paper's treatment of effort: <a class="ref" data-src="sm" data-p="15">SM p. 15</a>.</p>
   <div class="tablewrap"><table>
     <tr><th>Effect of +1 PSI point on</th><th class="n">Paper design</th><th class="n">Urban &times; month FE</th><th class="n">Real-PSI only</th></tr>
-    <tr><td>ln(number of birdwatcher records)</td><td class="n">&minus;0.041***</td><td class="n">&minus;0.014**</td><td class="n">&minus;0.008</td></tr>
+    <tr><td>ln(birdwatcher records)</td><td class="n">&minus;0.041***</td><td class="n">&minus;0.014**</td><td class="n">&minus;0.008</td></tr>
     <tr><td>ln(1 + total birding hours)</td><td class="n">&minus;0.057***</td><td class="n">&minus;0.020***</td><td class="n">&minus;0.011</td></tr>
     <tr><td>Chance a county-month is observed at all</td><td class="n">&minus;0.0055***</td><td class="n">+0.0001</td><td class="n">+0.0002</td></tr>
   </table></div>
-  <p>Holding ln(records) fixed, the PSI effect on Shannon is +0.003 (p = 0.31).</p>
-  <figure><img src="figures/5_4_observed_share_by_year.png" alt="Share of county-months with bird records by year, urban and rural" loading="lazy"><figcaption>Share of possible county-months with any record, by year. Urban districts pull away from rural counties.</figcaption></figure>
+  <figure><img src="figures/5_4_observed_share_by_year.png" alt="Share of county-months with bird records by year, urban and rural" loading="lazy"><figcaption>Share of possible county-months with any record. Urban grew 2.3 points a year faster than rural (p &lt; 0.001).</figcaption></figure>
   <div class="box why"><b class="h">How to read this</b>
   <ul>
-    <li>In the paper's design, PSI predicts less effort and fewer observed months.</li>
-    <li>Both links disappear in fair comparisons. So the same urban&ndash;rural split drives the main estimate, the effort gap and the missing months.</li>
-    <li>Holding effort fixed is a diagnostic, not a fix. If birds leave, birdwatchers may follow (a &ldquo;bad control&rdquo;). But the paper does not examine effort at all.</li>
+    <li>In the paper's design PSI predicts less effort and fewer observed months. In fair comparisons both links vanish.</li>
+    <li>Holding ln(records) fixed, the PSI effect on Shannon is +0.003 (p = 0.31).</li>
+    <li>That is a diagnostic, not a fix: if birds leave, birdwatchers may follow. But the paper never examines effort as an outcome.</li>
   </ul></div>
 </section>
 
 <section id="area">
-  <h2>4. Solar-plant area as the treatment</h2>
-  <p class="lead">PSI measures documents. Birds respond to land. So we also used the land area of centralized solar plants (km&sup2;).</p>
+  <h2>3. Solar-plant area as the treatment</h2>
+  <p class="lead">PSI measures documents; birds respond to land. Paper: <a class="ref" data-src="sm" data-p="41">Table S12, SM p. 41</a>.</p>
   <div class="tablewrap"><table>
     <tr><th>Specification (outcome: Shannon unless stated)</th><th class="n">Effect of +1 km&sup2;</th><th class="n">p</th></tr>
     <tr><td>Paper (Table S12, column 1)</td><td class="n">&minus;0.0387</td><td class="n">0.001</td></tr>
     <tr><td>Urban &times; year-month FE</td><td class="n">&minus;0.0298</td><td class="n">0.007</td></tr>
     <tr><td>Province &times; year-month FE</td><td class="n">&minus;0.0251</td><td class="n">0.036</td></tr>
-    <tr><td>Real-PSI counties</td><td class="n">&minus;0.0304</td><td class="n">0.027</td></tr>
-    <tr><td>Counties in the capacity file only</td><td class="n">&minus;0.0225</td><td class="n">0.066</td></tr>
     <tr><td>Holding ln(birdwatcher records) fixed</td><td class="n">&minus;0.0055</td><td class="n">0.62</td></tr>
     <tr><td>Outcome: ln(birdwatcher records)</td><td class="n">&minus;0.0843</td><td class="n">&lt;0.001</td></tr>
     <tr><td>dCDH, all counties</td><td class="n">&minus;0.106 (SE 0.068)</td><td class="n">n.s.</td></tr>
-    <tr><td>dCDH, capacity-file counties</td><td class="n">&minus;0.053 (SE 0.078)</td><td class="n">n.s.</td></tr>
   </table></div>
-  <figure><img src="figures/5_5_area_coefplot.png" alt="Coefficient plot of solar area effect across specifications" loading="lazy"><figcaption>Effect of solar area on Shannon across specifications.</figcaption></figure>
+  <figure><img src="figures/5_5_area_coefplot.png" alt="Coefficient plot of solar area effect" loading="lazy"><figcaption>Effect of solar area on Shannon across specifications.</figcaption></figure>
   <div class="box why"><b class="h">How to read this</b>
   <ul>
-    <li><b>For the paper:</b> Area stays negative in the comparison-group checks where PSI does not. This is the strongest support for the paper's story.</li>
-    <li><b>Against:</b> more solar area goes with 8.4% fewer records per km&sup2;, and holding records fixed removes 85% of the effect.</li>
-    <li>Species counts fall but evenness does not. Shorter species lists are what fewer observers produce.</li>
-    <li>dCDH with Area finds nothing significant.</li>
-    <li>Within a county over time, PSI is <i>negatively</i> related to solar area. The paper's positive correlation (r = 0.041) comes from comparing different counties.</li>
-  </ul></div>
-</section>
-
-<section id="sens">
-  <h2>5. Sensitivity to an omitted confounder</h2>
-  <p class="lead">The Cinelli&ndash;Hazlett method asks: how strong would a hidden confounder need to be to change the conclusion?</p>
-  <div class="tablewrap"><table>
-    <tr><th></th><th class="n">Paper design</th><th class="n">Urban &times; month FE</th></tr>
-    <tr><td>Estimate</td><td class="n">&minus;0.0125</td><td class="n">&minus;0.0027</td></tr>
-    <tr><td>Robustness value (brings estimate to 0)</td><td class="n"><b>2.16%</b></td><td class="n">0.44%</td></tr>
-    <tr><td>Robustness value (makes it insignificant)</td><td class="n"><b>1.24%</b></td><td class="n">already n.s.</td></tr>
-    <tr class="sep"><td colspan="3">Estimate if a confounder is k times as strong as Duration</td></tr>
-    <tr><td>k = 1</td><td class="n">&minus;0.0096</td><td class="n">&minus;0.0014</td></tr>
-    <tr><td>k = 2</td><td class="n">&minus;0.0067</td><td class="n">&minus;0.0002</td></tr>
-    <tr><td>k = 3</td><td class="n">&minus;0.0038 (n.s.)</td><td class="n">+0.0010</td></tr>
-    <tr><td>k = 4</td><td class="n">&minus;0.0009</td><td class="n">+0.0023</td></tr>
-    <tr><td>k = 5</td><td class="n">+0.0020</td><td class="n">+0.0035</td></tr>
-  </table></div>
-  <div class="two">
-    <figure><img src="figures/6_1_contour_estimate_S1.png" alt="Sensitivity contour plot, paper design" loading="lazy"><figcaption>Paper design. The red line is where the estimate reaches zero.</figcaption></figure>
-    <figure><img src="figures/6_1_contour_estimate_S2.png" alt="Sensitivity contour plot, urban by month fixed effects" loading="lazy"><figcaption>With urban &times; year-month effects.</figcaption></figure>
-  </div>
-  <div class="box why"><b class="h">How to read this</b>
-  <ul>
-    <li>An omitted variable explaining just over 2% of the leftover variation in both PSI and Shannon would wipe out the effect.</li>
-    <li>Duration, the paper's effort control, explains 4% of Shannon's leftover variation. Three times that makes the estimate insignificant.</li>
-    <li>The obvious candidate is the part of birding effort that hours-per-birdwatcher does not capture: where people go and how many go.</li>
+    <li><b>For the paper:</b> Area stays negative in the comparison-group checks where PSI does not.</li>
+    <li><b>Against:</b> more area goes with 8.4% fewer records per km&sup2;. Holding records fixed removes 85% of the effect. dCDH finds nothing significant.</li>
+    <li><b>Data:</b> source is licensed plants from the National Energy Administration (<a class="ref" data-src="sm" data-p="26">Table S2, SM p. 26</a>). The file has 11,699 true zeros, so missing counties can be told apart from counties with no plants.</li>
   </ul></div>
 </section>
 
 <section id="iv">
-  <h2>6. The instrumental variable</h2>
-  <p class="lead">Instrument: ln(long-run sunshine) &divide; city climate-policy uncertainty. The paper's IV estimate is &minus;0.126, ten times its main estimate.</p>
-  <h3>Strength</h3>
+  <h2>4. The instrumental variable</h2>
+  <p class="lead">Paper: <a class="ref" data-src="sm" data-p="8">design, SM p. 8</a>; <a class="ref" data-src="sm" data-p="33">estimates, Table S7, SM p. 33</a>. The IV estimate (&minus;0.126) is ten times the main estimate.</p>
   <div class="tablewrap"><table>
     <tr><th>Clustering</th><th class="n">Instrument F</th><th>Benchmark 23.1</th><th>95% Anderson&ndash;Rubin set</th></tr>
     <tr><td>County (paper)</td><td class="n">30.2</td><td>passes</td><td>[&minus;0.217, &minus;0.069]</td></tr>
     <tr><td>City</td><td class="n">10.8</td><td>fails</td><td>[&minus;0.295, &minus;0.038]</td></tr>
     <tr><td>Province</td><td class="n">2.8</td><td>fails</td><td>(&minus;&infin;, &minus;0.030] &cup; [0.590, &infin;)</td></tr>
   </table></div>
-  <figure><img src="figures/5_6_anderson_rubin_curve.png" alt="Anderson-Rubin test curve" loading="lazy"><figcaption>Anderson&ndash;Rubin test across candidate effect sizes. Values below the line are in the confidence set.</figcaption></figure>
-  <h3>Exclusion restriction</h3>
-  <p>In the 724 counties with PSI fixed at 0, the instrument cannot move PSI. It still lowers Shannon there: &minus;0.00214 (p = 0.048).</p>
-  <div class="tablewrap"><table>
-    <tr><th>Assumed direct effect of the instrument</th><th class="n">IV estimate</th><th class="n">95% AR set</th></tr>
-    <tr><td>0 (the paper's assumption)</td><td class="n">&minus;0.126</td><td class="n">[&minus;0.217, &minus;0.068]</td></tr>
-    <tr><td>&minus;0.00214 (estimated)</td><td class="n">&minus;0.042</td><td class="n">[&minus;0.105, +0.014]</td></tr>
-    <tr><td>&minus;0.00425 (lower end of its 95% CI)</td><td class="n">+0.042</td><td class="n">[&minus;0.013, +0.114]</td></tr>
-  </table></div>
+  <figure><img src="figures/5_6_anderson_rubin_curve.png" alt="Anderson-Rubin test curve" loading="lazy"><figcaption>Anderson&ndash;Rubin test across candidate effect sizes.</figcaption></figure>
   <div class="box why"><b class="h">How to read this</b>
   <ul>
-    <li><b>Weakness is not the problem.</b> Anderson&ndash;Rubin sets do not depend on instrument strength and still exclude zero.</li>
-    <li><b>Exclusion is.</b> City policy uncertainty plausibly affects birds or birding in other ways: other environmental policy, land use, the local economy.</li>
-    <li>The measured direct effect is two-thirds of the reduced form. Removing it leaves an estimate a third of the size and not significant.</li>
-    <li><b>Caveat.</b> The direct effect is measured in mostly urban counties. Treat this as a sensitivity check, not a corrected estimate.</li>
-    <li><b>Data detail.</b> The sunshine variable's label says 1994&ndash;2023, not the 1984&ndash;2013 stated in the paper. If so, it overlaps the study period.</li>
+    <li><b>Weakness is not the problem.</b> Anderson&ndash;Rubin sets stay valid with weak instruments and still exclude zero.</li>
+    <li><b>Exclusion is.</b> Where PSI is fixed at 0, the instrument still lowers Shannon: &minus;0.00214 (p = 0.048). Allowing for it gives &minus;0.042, with an Anderson&ndash;Rubin set of [&minus;0.105, +0.014]. <a href="#lab-iv">Try other values.</a></li>
   </ul></div>
 </section>
 
 <section id="did">
-  <h2>7. Staggered difference-in-differences (binary adoption)</h2>
-  <p class="lead">When treatment starts at different times, plain TWFE uses already-treated counties as controls. Modern estimators avoid that.</p>
+  <h2>5. Staggered difference-in-differences (binary adoption)</h2>
+  <p class="lead">When treatment starts at different times, TWFE uses already-treated counties as controls. These estimators avoid that.</p>
   <div class="tablewrap"><table>
     <tr><th>Estimator</th><th class="n">Main sample (real PSI)</th><th class="n">Paper-style (missing PSI = never treated)</th></tr>
     <tr><td>TWFE, same binary treatment</td><td class="n">+0.032</td><td class="n"></td></tr>
-    <tr><td>Callaway &amp; Sant'Anna</td><td class="n">+0.057 (n.s.)</td><td class="n">&minus;0.091</td></tr>
-    <tr><td>Borusyak, Jaravel &amp; Spiess</td><td class="n">+0.078 (n.s.)</td><td class="n">&minus;0.087 (pre-period &minus;0.173)</td></tr>
-    <tr><td>Sun &amp; Abraham</td><td class="n">+0.024 (n.s.)</td><td class="n"></td></tr>
+    <tr><td>Callaway &amp; Sant'Anna (2021)</td><td class="n">+0.057 (n.s.)</td><td class="n">&minus;0.091</td></tr>
+    <tr><td>Borusyak, Jaravel &amp; Spiess (2024)</td><td class="n">+0.078 (n.s.)</td><td class="n">&minus;0.087 (pre-period &minus;0.173)</td></tr>
+    <tr><td>Sun &amp; Abraham (2021)</td><td class="n">+0.024 (n.s.)</td><td class="n"></td></tr>
   </table></div>
   <div class="two">
-    <figure><img src="figures/3_3_event_study_cs_1.png" alt="Callaway-Sant'Anna event study" loading="lazy"><figcaption>Callaway &amp; Sant'Anna event study.</figcaption></figure>
-    <figure><img src="figures/3_4_event_study_bjs_1.png" alt="Borusyak-Jaravel-Spiess event study" loading="lazy"><figcaption>Borusyak, Jaravel &amp; Spiess event study.</figcaption></figure>
+    <figure><img src="figures/3_3_event_study_cs_1.png" alt="Callaway-Sant'Anna event study" loading="lazy"><figcaption>Callaway &amp; Sant'Anna.</figcaption></figure>
+    <figure><img src="figures/3_4_event_study_bjs_1.png" alt="Borusyak-Jaravel-Spiess event study" loading="lazy"><figcaption>Borusyak, Jaravel &amp; Spiess.</figcaption></figure>
   </div>
   <div class="box why"><b class="h">How to read this</b>
   <ul>
-    <li>In the main sample, none of the three finds harm.</li>
-    <li>Negative estimates appear only when the filled-in urban counties serve as &ldquo;never treated&rdquo; controls. Then there is a large gap the year <i>before</i> adoption, so parallel trends fail.</li>
-    <li><b>Limits.</b> These estimators turn PSI into 0/1, drop the 838 counties already treated in 2014, and ignore that PSI falls back to 0 in about 15% of later years.</li>
+    <li>None finds harm in the main sample. Negative estimates appear only when filled-in urban counties act as controls, and then pre-trends fail.</li>
+    <li><b>Limits:</b> PSI becomes 0/1; the 838 counties already treated in 2014 are dropped.</li>
   </ul></div>
 </section>
 
 <section id="dcdh">
-  <h2>8. de Chaisemartin &amp; D'Haultf&oelig;uille: PSI as a dose</h2>
-  <p class="lead">dCDH compares each county whose PSI changes with counties that started at the same PSI and have not changed yet. It keeps the full dose and uses every change.</p>
+  <h2>6. de Chaisemartin &amp; D'Haultf&oelig;uille: PSI as a dose</h2>
+  <p class="lead">dCDH compares each county whose PSI changes with counties at the same starting PSI that have not changed yet. These runs take minutes each, so they are shown as fixed results.</p>
   <div class="tablewrap"><table>
     <tr><th>Specification</th><th class="n">Effect per PSI point (SE)</th><th>Pre-trend test</th></tr>
     <tr class="sep"><td colspan="3">did_multiplegt_dyn (event study)</td></tr>
     <tr><td>All counties</td><td class="n">&minus;0.055 (0.018)***</td><td>passes (p = 0.74)</td></tr>
     <tr><td>Within urban / within rural</td><td class="n">&minus;0.041 (0.019)**</td><td>passes</td></tr>
     <tr><td>Real-PSI counties</td><td class="n">&minus;0.037 (0.019)**</td><td>passes</td></tr>
-    <tr><td>All counties, adjusted for the 9 controls</td><td class="n">&minus;0.041 (0.018)**</td><td>passes</td></tr>
-    <tr><td>Real-PSI, adjusted for controls</td><td class="n">&minus;0.025 (0.019)</td><td>passes</td></tr>
+    <tr><td>Real-PSI, adjusted for the 9 controls</td><td class="n">&minus;0.025 (0.019)</td><td>passes</td></tr>
     <tr><td>Within urban/rural, adjusted for controls</td><td class="n">&minus;0.029 (0.018)</td><td>passes</td></tr>
     <tr class="sep"><td colspan="3">did_multiplegt_stat (weighted average slope)</td></tr>
     <tr><td>All counties</td><td class="n">&minus;0.035 (0.016)**</td><td>passes</td></tr>
-    <tr><td>Real-PSI counties</td><td class="n">&minus;0.027 (0.013)**</td><td>passes</td></tr>
     <tr><td>All counties, with the 9 controls</td><td class="n">&minus;0.024 (0.015)</td><td>passes</td></tr>
     <tr class="sep"><td colspan="3">Outcome: ln(birdwatcher records)</td></tr>
     <tr><td>dyn, all counties</td><td class="n">&minus;0.019 (0.010)</td><td><b>fails</b> (p = 0.001)</td></tr>
-    <tr><td>dyn, real-PSI counties</td><td class="n">+0.006 (0.011)</td><td><b>fails</b> (p = 0.001)</td></tr>
-    <tr class="sep"><td colspan="3">Benchmark: TWFE on the same county-year panel</td></tr>
-    <tr><td>All counties / real-PSI</td><td class="n">&minus;0.009** / &minus;0.003</td><td></td></tr>
   </table></div>
-  <figure><img src="figures/6_2_dcdh_dyn_eventstudy.png" alt="dCDH event study" loading="lazy"><figcaption>dCDH event study. Left of zero: placebo (pre-trend) estimates. Right: effects 1 to 5 years after PSI first changes.</figcaption></figure>
+  <figure><img src="figures/6_2_dcdh_dyn_eventstudy.png" alt="dCDH event study" loading="lazy"><figcaption>Left of zero: placebo estimates. Right: effects 1 to 5 years after PSI first changes.</figcaption></figure>
   <div class="box why"><b class="h">How to read this</b>
   <ul>
-    <li><b>For the paper.</b> When a county's PSI rises, its recorded diversity falls relative to similar counties, and the Shannon pre-trend tests pass. This is the most supportive result in our analysis.</li>
-    <li><b>Against.</b> With the paper's controls the estimate is &minus;0.024 to &minus;0.029 and not significant in the real-PSI, within-urban/rural or full-controls versions.</li>
-    <li><b>Effort pre-trends fail.</b> Before their PSI rose, these counties' birding activity was growing faster than in comparison counties. So part of the Shannon change may again reflect observation.</li>
+    <li><b>For the paper:</b> a negative effect with Shannon pre-trends passing. The most supportive result we have.</li>
+    <li><b>Against:</b> not significant with the paper's controls in the fair samples, and the effort pre-trend test fails.</li>
+    <li><b>Why it differs from section 5:</b> it measures the effect of <i>more</i> policy, using later increases in counties already treated in 2014. The binary estimators measure the effect of a <i>first</i> policy.</li>
+    <li><b>Not run:</b> the &ldquo;no stayers&rdquo; method (<code>did_had</code>) needs all units untreated at first and one adoption date. Neither holds here.</li>
   </ul></div>
-  <h3>Which dCDH method fits these data</h3>
-  <div class="tablewrap"><table>
-    <tr><th>Command</th><th>Design it needs</th><th>Used?</th></tr>
-    <tr><td><code>did_multiplegt_dyn</code></td><td>Treatment can be non-binary, start at different times, and move up or down</td><td>Yes</td></tr>
-    <tr><td><code>did_multiplegt_stat</code></td><td>Some units keep the same treatment between consecutive periods (&ldquo;stayers&rdquo;)</td><td>Yes. About 74% of county-years are stayers</td></tr>
-    <tr><td><code>did_had</code> (no stayers)</td><td>All units untreated at first, then all treated at one date</td><td>No. 838 counties are already treated in 2014 and timing varies</td></tr>
-  </table></div>
+</section>
+
+<section id="qa">
+  <h2>Questions answered</h2>
+  <input type="search" id="qsearch" placeholder="Filter, e.g. IV, birdwatchers, area, dCDH" aria-label="Filter questions">
+  <div id="qlist">
+  <details><summary>What does &ldquo;83% of urban county-months have imputed PSI&rdquo; mean?</summary><div><p>Of all urban county-months in the regression, 83.1% belong to counties whose PSI was missing and filled in as 0. For rural the share is 1.2%. The real-PSI sample drops 20,364 rows, 98.7% of them urban.</p></div></details>
+  <details><summary>Where does the paper analyze the number of birdwatchers?</summary><div><p>Only inside the control <i>Duration</i> (<a class="ref" data-src="sm" data-p="24">Table S1, SM p. 24</a>). In the authors' file the variable is a count of submitted records per county-month, so it measures checklists, not people.</p></div></details>
+  <details><summary>Why did the first sensitivity run fail, and how was it fixed?</summary><div><p>Explicit county dummies need 2,344 variables; Stata/BE allows 2,048. Residualizing every variable on the fixed effects first gives exactly the same coefficient (&minus;0.0125283) and lets <code>sensemakr</code> run.</p></div></details>
+  <details><summary>Is the instrument weak?</summary><div><p>F is 30.2 with county clusters, 10.8 with city clusters, 2.8 with province clusters. But Anderson&ndash;Rubin sets, valid with weak instruments, still exclude zero. The problem is exclusion, not strength.</p></div></details>
+  <details><summary>Is the plausibly-exogenous IV step valid?</summary><div><p>As a sensitivity check, yes. As a corrected estimate, no: the direct effect is measured in mostly urban counties. It shows the IV conclusion depends on an assumption the data contradict.</p></div></details>
+  <details><summary>Is Area missing for the same counties as PSI?</summary><div><p>No. Area is missing for 1,184 counties; only 473 of them also lack PSI. So missing data do not explain choosing PSI over Area.</p></div></details>
+  <details><summary>Why do dCDH and the binary estimators disagree?</summary><div><p>They answer different questions: the effect of more policy versus the effect of a first policy. Most PSI variation is later increases in counties already treated in 2014, which only dCDH uses.</p></div></details>
+  <details><summary>What could not be run?</summary><div><p><code>did_multiplegt_dyn</code> with <code>controls()</code> and with <code>continuous()</code>, and explicit-dummy sensitivity, all because of Stata/BE limits. Workarounds are described above; all three can run in Stata/MP or R.</p></div></details>
+  <details><summary>Are the live tools real estimates or approximations?</summary><div><p>Real. Tools A and C read results from Stata regressions run in advance (<code>7_1_spec_grid.do</code>). Tool B uses the published closed-form formulas with inputs from Stata, and reproduces <code>sensemakr</code> to four decimals.</p></div></details>
+  </div>
 </section>
 
 <section id="conclusion">
   <h2>Conclusion and limitations</h2>
   <div class="box verdict"><b class="h">Conclusion</b>
   <ul>
-    <li>The reported effect depends on three things: comparing rural counties with urban districts whose policy data are missing; an outcome built from opportunistic records whose volume is related to the treatment; and an instrument with a measurable direct effect.</li>
-    <li>The most favourable modern estimator (dCDH) finds a negative effect. It loses significance with the paper's controls in comparable samples, and its effort pre-trend test fails.</li>
-    <li><b>The evidence is insufficient to conclude that China's solar expansion policy reduced bird diversity. It is also not evidence of no effect.</b></li>
+    <li>The reported effect depends on comparing rural counties with urban districts whose policy data are missing, on an outcome whose volume is related to the treatment, and on an instrument with a measurable direct effect.</li>
+    <li>The most favourable modern estimator (dCDH) finds a negative effect, but it weakens with controls and its effort pre-trend test fails.</li>
+    <li><b>The evidence is insufficient to conclude that the policy reduced bird diversity. It is also not evidence of no effect.</b></li>
   </ul></div>
   <h3>Limitations of this evaluation</h3>
   <ul>
-    <li>We rely on the authors' data files. How some were built (the Table S14 samples, the sunshine period) could not be verified.</li>
+    <li>We rely on the authors' data files; how some were built could not be verified.</li>
     <li>&ldquo;Holding birdwatchers fixed&rdquo; is a diagnostic, not a solution.</li>
-    <li>Stata/BE limits prevented three specifications (see <a href="#qa">Questions answered</a>).</li>
+    <li>Stata/BE limits prevented three specifications.</li>
   </ul>
   <h3>What would settle it</h3>
   <ol>
-    <li>A test where observation effort is fixed by design, such as China BON-Birds fixed transects.</li>
-    <li>dCDH with controls and the continuous option in Stata/MP or R, with bounds for the effort pre-trends.</li>
-    <li>Inverse-probability weighting for observed months, using the full county &times; month grid.</li>
-    <li>Asking the authors about the Table S14 samples, the sunshine period, and why PSI rather than Area is the main treatment.</li>
+    <li>A test where effort is fixed by design, such as China BON-Birds fixed transects.</li>
+    <li>dCDH with controls and the continuous option, with bounds for the effort pre-trends.</li>
+    <li>Inverse-probability weighting for observed months.</li>
   </ol>
 </section>
 
 <section id="repro">
-  <h2>Code and reports</h2>
-  <p><a class="btn" href="reports/Final_Report.pdf">Full report (PDF)</a><a class="btn alt" href="reports/dCDH_Report.pdf">dCDH report (PDF)</a><a class="btn alt" href="https://github.com/sahiljangra12/sahiljangra12.github.io/tree/main/docs/solar-birds-replication/code">Browse the Stata code</a></p>
-  <p>One file runs everything. Set the folder path in <code>00_config.do</code> first.</p>
+  <h2>Code, data and reports</h2>
+  <p><a class="btn" href="reports/Final_Report.pdf">Final report</a><a class="btn alt" href="reports/dCDH_Report.pdf">dCDH report</a><a class="btn alt" href="https://github.com/sahiljangra12/sahiljangra12.github.io/tree/main/docs/solar-birds-replication/code">Stata code</a><a class="btn alt" href="data/spec_grid.csv">792-regression grid (CSV)</a></p>
   <pre>do "YOUR_PATH/Solar_Birds_Replication/run_everything.do"</pre>
   <div class="tablewrap"><table>
-    <tr><th>Folder</th><th>Files</th><th>What it does</th></tr>
-    <tr><td><code>01_Task1_Replication</code></td><td>1_2 to 1_6</td><td>Sample build, reproduction check, TWFE diagnostics, IV exclusion tests</td></tr>
-    <tr><td><code>02_Task2_Sensitivity</code></td><td>2_1</td><td>Cinelli&ndash;Hazlett sensitivity analysis</td></tr>
-    <tr><td><code>03_Task3_Staggered_DiD</code></td><td>3_1 to 3_5</td><td>Adoption timing, TWFE event study, Callaway&ndash;Sant'Anna, BJS, Sun&ndash;Abraham</td></tr>
-    <tr><td><code>05_Followups_Nov13</code></td><td>5_1 to 5_6</td><td>Effort test, sample flow, missingness grid, solar area, weak-IV and Anderson&ndash;Rubin</td></tr>
-    <tr><td><code>06_Followups_Nov19</code></td><td>6_1 to 6_4</td><td>Residualized sensitivity, dCDH (dyn and stat), data facts, covariate-adjusted dCDH, dCDH with Area, urban growth</td></tr>
+    <tr><th>Folder</th><th>What it does</th></tr>
+    <tr><td><code>01_Task1_Replication</code></td><td>Sample build, reproduction check, TWFE diagnostics, IV exclusion tests</td></tr>
+    <tr><td><code>02_Task2_Sensitivity</code></td><td>Cinelli&ndash;Hazlett sensitivity analysis</td></tr>
+    <tr><td><code>03_Task3_Staggered_DiD</code></td><td>Callaway&ndash;Sant'Anna, BJS, Sun&ndash;Abraham</td></tr>
+    <tr><td><code>05_Followups_Nov13</code></td><td>Effort, sample flow, missingness grid, solar area, weak-IV and Anderson&ndash;Rubin</td></tr>
+    <tr><td><code>06_Followups_Nov19</code></td><td>Residualized sensitivity, dCDH, data facts, extra checks</td></tr>
+    <tr><td><code>07_Interactive</code></td><td>The regression grid, sensitivity inputs and IV grid behind the live tools</td></tr>
   </table></div>
-  <p class="small">The authors' data and original code are not redistributed here. They are available from the paper's replication package. Stata packages used: <code>reghdfe</code>, <code>ivreghdfe</code>, <code>sensemakr</code>, <code>csdid</code>, <code>did_imputation</code>, <code>eventstudyinteract</code>, <code>did_multiplegt_dyn</code>, <code>did_multiplegt_stat</code>, <code>gtools</code>.</p>
+  <h3>References</h3>
+  <ul class="small">
+    <li>Borusyak, Jaravel &amp; Spiess (2024). Revisiting event-study designs. <i>Review of Economic Studies</i>.</li>
+    <li>Callaway &amp; Sant'Anna (2021). Difference-in-differences with multiple time periods. <i>Journal of Econometrics</i>.</li>
+    <li>Cinelli &amp; Hazlett (2020). Making sense of sensitivity. <i>JRSS-B</i> 82(1).</li>
+    <li>Conley, Hansen &amp; Rossi (2012). Plausibly exogenous. <i>Review of Economics and Statistics</i>.</li>
+    <li>de Chaisemartin &amp; D'Haultf&oelig;uille. Difference-in-differences estimators of intertemporal treatment effects. <i>Review of Economics and Statistics</i> 108(4).</li>
+    <li>de Chaisemartin, D'Haultf&oelig;uille &amp; Vazquez-Bare (2024). DiD estimators with continuous treatments and no stayers. <i>AEA Papers and Proceedings</i>.</li>
+    <li>Montiel Olea &amp; Pflueger (2013). A robust test for weak instruments. <i>JBES</i>.</li>
+    <li>Sun &amp; Abraham (2021). Estimating dynamic treatment effects in event studies. <i>Journal of Econometrics</i>.</li>
+    <li>van Kippersluis &amp; Rietveld (2018). Beyond plausibly exogenous. <i>Econometrics Journal</i>.</li>
+    <li>Wing et al. (2024). Designing difference-in-difference studies with staggered treatment adoption. <i>Annual Review of Public Health</i>.</li>
+    <li>Zhang et al. (2026). China's solar expansion policy reduces bird diversity. <i>Science</i> 393, 831.</li>
+  </ul>
+  <p class="small">The authors' data and original code are not redistributed here; they come from the paper's replication package.</p>
 </section>
 
 <section id="glossary">
   <h2>Glossary</h2>
   <div class="gloss">
-    <div><b>Shannon index</b><br>A diversity score. It is higher when more species are recorded and when records are spread evenly across them.</div>
-    <div><b>PSI</b><br>Policy Stringency Index. A score of how many, and how binding, solar-promotion documents a county has in a year.</div>
-    <div><b>TWFE</b><br>Two-way fixed effects. A regression that compares each county with itself over time, net of shocks common to all counties in a month.</div>
-    <div><b>Fixed effects (FE)</b><br>Separate baselines for each county and each time period, so only changes within a county over time are used.</div>
-    <div><b>Imputed PSI</b><br>PSI that was missing in the policy files and filled in as 0 by the authors.</div>
-    <div><b>Confounder</b><br>Something that affects both the policy and the outcome, creating a link that is not causal.</div>
-    <div><b>Robustness value</b><br>How strong a hidden confounder must be, as a share of leftover variation, to bring the estimate to zero.</div>
-    <div><b>Instrumental variable (IV)</b><br>A variable that shifts the treatment but should affect the outcome only through it. Used to isolate causal variation.</div>
-    <div><b>Exclusion restriction</b><br>The assumption that the instrument has no direct effect on the outcome.</div>
+    <div><b>Shannon index</b><br>A diversity score: higher when more species are recorded and records are spread evenly.</div>
+    <div><b>PSI</b><br>Policy Stringency Index: how many, and how binding, solar-promotion documents a county has in a year.</div>
+    <div><b>TWFE / fixed effects</b><br>A regression that compares each county with itself over time, net of shocks common to all counties in a month.</div>
+    <div><b>Imputed PSI</b><br>PSI that was missing and filled in as 0 by the authors.</div>
+    <div><b>Confounder</b><br>Something that affects both the policy and the outcome, creating a non-causal link.</div>
+    <div><b>Instrumental variable</b><br>A variable that shifts the treatment and should affect the outcome only through it (the exclusion restriction).</div>
     <div><b>Anderson&ndash;Rubin set</b><br>A confidence interval for an IV estimate that stays valid when the instrument is weak.</div>
-    <div><b>Staggered DiD</b><br>Difference-in-differences when units start treatment at different times.</div>
-    <div><b>Pre-trend (placebo) test</b><br>Checks whether treated and comparison units were already moving apart before treatment. If they were, the comparison is suspect.</div>
-    <div><b>Stayers and switchers</b><br>Units whose treatment stays the same, and units whose treatment changes, between two periods.</div>
-    <div><b>n.s.</b><br>Not statistically significant at the 5% level. Stars: ** p &lt; 0.05, *** p &lt; 0.01.</div>
+    <div><b>Pre-trend (placebo) test</b><br>Checks whether treated and comparison units were already diverging before treatment.</div>
+    <div><b>Clustering</b><br>Allowing errors to be correlated within a group (county, city, province) when computing standard errors.</div>
+    <div><b>n.s. and stars</b><br>n.s. = not significant at 5%. ** p &lt; 0.05, *** p &lt; 0.01.</div>
   </div>
 </section>
 
-<p class="small">Source paper: Zhang et al. (2026), &ldquo;China's solar expansion policy reduces bird diversity&rdquo;, <i>Science</i> 393, 831. This page is an independent replication and evaluation; it is not affiliated with the paper's authors or the journal.</p>
+<p class="small">Independent replication and evaluation; not affiliated with the paper's authors or the journal.</p>
 </main>
 </div>
-<script>
-(function(){
-  var root=document.documentElement,btn=document.getElementById('themeBtn');
-  function set(t){root.setAttribute('data-theme',t);btn.textContent=t==='dark'?'Light mode':'Dark mode';}
-  var saved=null;try{saved=localStorage.getItem('theme');}catch(e){}
-  set(saved||(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'));
-  btn.addEventListener('click',function(){var t=root.getAttribute('data-theme')==='dark'?'light':'dark';set(t);try{localStorage.setItem('theme',t);}catch(e){}});
-
-  var q=document.getElementById('qsearch'),items=[].slice.call(document.querySelectorAll('#qlist details'));
-  q.addEventListener('input',function(){var s=q.value.trim().toLowerCase();
-    items.forEach(function(d){var hit=!s||d.textContent.toLowerCase().indexOf(s)>-1;d.style.display=hit?'':'none';d.open=!!s&&hit;});});
-
-  var links=[].slice.call(document.querySelectorAll('nav a')),map={};
-  links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a;});
-  if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.remove('active');});var a=map[e.target.id];if(a)a.classList.add('active');}});},{rootMargin:'-10% 0px -75% 0px'});
-    document.querySelectorAll('section[id],header[id]').forEach(function(s){io.observe(s);});
-  }
-  if(location.hash){var t=document.querySelector(location.hash);if(t&&t.tagName==='DETAILS')t.open=true;}
-})();
-</script>
+<script src="data.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
