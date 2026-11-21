@@ -41,6 +41,47 @@
     Object.keys(map).forEach(function (id) { var s = document.getElementById(id); if (s) so.observe(s); });
   }
 
+  // orbit rings around the lab logo (matches the Lovable hero)
+  var oc = document.querySelector(".orbit-canvas");
+  if (oc) {
+    var octx = oc.getContext("2d"), ow = 0, oh = 0, orbStars = [];
+    var RINGS = 6;
+    function osize() {
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      ow = oc.clientWidth; oh = oc.clientHeight;
+      oc.width = ow * dpr; oc.height = oh * dpr;
+      octx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function ring(i) {
+      var base = Math.min(ow * 0.46, 760);
+      return { rx: base + i * Math.min(ow * 0.04, 62), ry: oh * 0.21 + i * oh * 0.032 };
+    }
+    var seeds = [[0, 4.4], [1, 0.3], [2, 2.6], [3, 5.6], [4, 1.5], [5, 3.6]];
+    seeds.forEach(function (s, k) { orbStars.push({ ring: s[0], a: s[1], w: 0.018 + (k % 3) * 0.006 }); });
+    var last = 0;
+    function odraw(t) {
+      var dt = last ? Math.min((t - last) / 1000, 0.1) : 0; last = t;
+      octx.clearRect(0, 0, ow, oh);
+      var cx = ow / 2, cy = oh / 2;
+      octx.lineWidth = 1;
+      for (var i = 0; i < RINGS; i++) {
+        var r = ring(i);
+        octx.strokeStyle = "rgba(225,232,245," + (0.42 - i * 0.04) + ")";
+        octx.beginPath(); octx.ellipse(cx, cy, r.rx, r.ry, 0, 0, 6.2832); octx.stroke();
+      }
+      orbStars.forEach(function (s) {
+        if (!reduce) s.a += s.w * dt;
+        var r = ring(s.ring), x = cx + r.rx * Math.cos(s.a), y = cy + r.ry * Math.sin(s.a);
+        var g = octx.createRadialGradient(x, y, 0, x, y, 9);
+        g.addColorStop(0, "rgba(255,255,255,0.95)"); g.addColorStop(0.25, "rgba(235,242,255,0.55)"); g.addColorStop(1, "rgba(220,230,255,0)");
+        octx.fillStyle = g; octx.beginPath(); octx.arc(x, y, 9, 0, 6.2832); octx.fill();
+        octx.fillStyle = "#fff"; octx.beginPath(); octx.arc(x, y, 1.8, 0, 6.2832); octx.fill();
+      });
+      if (!reduce) requestAnimationFrame(odraw);
+    }
+    osize(); addEventListener("resize", osize); requestAnimationFrame(odraw);
+  }
+
   // starfield
   var c = document.getElementById("stars");
   if (!c) return;
