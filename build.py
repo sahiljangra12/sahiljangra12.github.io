@@ -1,7 +1,7 @@
 """Builds the static site pages from the content below. Run: python3 build.py"""
 import os, hashlib
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "docs")
 L = "https://sahil-ams-ds.lovable.app"          # files still hosted on the Lovable site
 GH = "https://github.com/sahiljangra12"
 IO = "https://sahiljangra12.github.io"
