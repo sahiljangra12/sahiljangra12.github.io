@@ -1,5 +1,5 @@
 """Builds the static site pages from the content below. Run: python3 build.py"""
-import os
+import os, hashlib
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 L = "https://sahil-ams-ds.lovable.app"          # files still hosted on the Lovable site
@@ -9,6 +9,10 @@ CV = "papers/CV_Sahil.pdf"
 EMAIL = "sfnu1@jh.edu"
 LINKEDIN = "https://www.linkedin.com/in/sahil-j-3b5322261"
 EXT = ' target="_blank" rel="noopener"'
+
+
+def ver(path):
+    return hashlib.md5(open(os.path.join(ROOT, path), "rb").read()).hexdigest()[:8]
 
 
 def head(title, desc, base=""):
@@ -30,7 +34,7 @@ def head(title, desc, base=""):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{base}assets/css/site.css">
+<link rel="stylesheet" href="{base}assets/css/site.css?v={ver('assets/css/site.css')}">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -55,7 +59,7 @@ def foot(base=""):
 <span class="code">© 2026 Sahil · Baltimore, Maryland</span>
 <span class="code"><a href="{GH}"{EXT}>GitHub</a> · <a href="{LINKEDIN}"{EXT}>LinkedIn</a> · <a href="mailto:{EMAIL}">Email</a></span>
 </div></footer>
-<script src="{base}assets/js/site.js" defer></script>
+<script src="{base}assets/js/site.js?v={ver('assets/js/site.js')}" defer></script>
 </body>
 </html>
 """
