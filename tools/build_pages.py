@@ -191,7 +191,7 @@ def main():
     names = {}
     for ch in wrap.find_all(recursive=False):
         cls = ch.get('class') or []
-        if 'section-head' in cls or 'poster-index' in cls or 'proj-back' in cls:
+        if 'section-head' in cls or 'poster-index' in cls or 'proj-back' in cls or 'poster-group' in cls:
             continue
         if ch.name == 'p' and 'study-tag' in cls and ch.get('id'):
             cur = ch['id']
@@ -201,7 +201,7 @@ def main():
         if cur:
             groups.setdefault(cur, []).append(ch)
     idx = ['<p>%s</p>' % html.escape(wrap.find(class_='section-head').find('p').get_text(' ', strip=True)), '<ul>']
-    for a in wrap.find(class_='poster-index').find_all('a'):
+    for a in [a for ol in wrap.find_all(class_='poster-index') for a in ol.find_all('a')]:
         pid = a['href'][1:]
         label = a.get('aria-label') or a.get_text(' ', strip=True)
         small = a.find('small')
