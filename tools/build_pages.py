@@ -17,7 +17,7 @@ from bs4 import BeautifulSoup, NavigableString
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs')
 SITE = 'https://sahiljangra12.github.io'
-OG_IMAGE = SITE + '/assets/social/sahil-preview-3.png'
+OG_IMAGE = SITE + '/assets/social/sahil-preview-4.png'
 NAME = 'Sahil'
 
 PROJECTS = [  # id in the app, address slug

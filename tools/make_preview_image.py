@@ -27,17 +27,17 @@ bg=wall.crop((cx-W//2,cy-H//2,cx+W//2,cy+H//2))
 bg=ImageEnhance.Brightness(bg).enhance(0.92)
 # darken toward the middle band where the card sits, keep edges lively
 shade=Image.new('L',(W,H),0); sd=ImageDraw.Draw(shade)
-sd.rounded_rectangle([120,120,W-120,H-120],radius=80,fill=90); shade=shade.filter(ImageFilter.GaussianBlur(60))
+sd.rounded_rectangle([420,150,W-150,H-140],radius=90,fill=150); shade=shade.filter(ImageFilter.GaussianBlur(70))
 bg=Image.composite(Image.new('RGB',(W,H),(4,5,9)),bg,shade)
 # --- glass card
 card=[78,96,W-78,H-96]
-blur=bg.filter(ImageFilter.GaussianBlur(22)); blur=ImageEnhance.Brightness(blur).enhance(0.42)
+blur=bg.filter(ImageFilter.GaussianBlur(5)); blur=ImageEnhance.Brightness(blur).enhance(0.78)
 cm=Image.new('L',(W,H),0); ImageDraw.Draw(cm).rounded_rectangle(card,radius=54,fill=255)
 sh=Image.new('RGBA',(W,H),(0,0,0,0)); ImageDraw.Draw(sh).rounded_rectangle([card[0],card[1]+14,card[2],card[3]+14],radius=54,fill=(0,0,0,150)); sh=sh.filter(ImageFilter.GaussianBlur(26))
 bg=Image.alpha_composite(bg.convert('RGBA'),sh).convert('RGB')
 bg=Image.composite(blur,bg,cm)
 ov=Image.new('RGBA',(W,H),(0,0,0,0)); od=ImageDraw.Draw(ov)
-od.rounded_rectangle(card,radius=54,fill=(8,10,18,150),outline=(255,255,255,120),width=2)
+od.rounded_rectangle(card,radius=54,fill=(255,255,255,16),outline=(255,255,255,170),width=2)
 bg=Image.alpha_composite(bg.convert('RGBA'),ov).convert('RGB')
 # top rim highlight
 hl=Image.new('RGBA',(W,H),(0,0,0,0)); ImageDraw.Draw(hl).arc([card[0],card[1],card[2],card[1]+108],180,360,fill=(255,255,255,0))
@@ -63,14 +63,22 @@ for y in range(lh):
 x=496; ly=116
 s2=Image.new('RGBA',(W,H),(0,0,0,0)); s2.paste((0,0,0,170),(x+2,ly+5),a); s2=s2.filter(ImageFilter.GaussianBlur(5))
 bg=Image.alpha_composite(bg.convert('RGBA'),s2).convert('RGB'); bg.paste(grad,(x,ly),a)
-d=ImageDraw.Draw(bg); y0=ly+lh+20
+y0=ly+lh+20
+ts=Image.new('RGBA',(W,H),(0,0,0,0)); td=ImageDraw.Draw(ts)
+td.text((x-3,y0+3),'Sahil',font=f('InterDisplay-ExtraBold.otf',80),fill=(0,0,0,230))
+td.text((x,y0+102),'Data science.',font=f('InterDisplay-Bold.otf',37),fill=(0,0,0,230))
+td.text((x,y0+146),'Evidence before conclusions.',font=f('InterDisplay-Bold.otf',37),fill=(0,0,0,230))
+td.text((x,y0+208),'MSE Data Science · Johns Hopkins University',font=f('Inter-Medium.otf',23),fill=(0,0,0,240))
+ts=ts.filter(ImageFilter.GaussianBlur(7))
+bg=Image.alpha_composite(bg.convert('RGBA'),ts); bg=Image.alpha_composite(bg,ts).convert('RGB')
+d=ImageDraw.Draw(bg)
 d.text((x-3,y0),'Sahil',font=f('InterDisplay-ExtraBold.otf',80),fill=(255,255,255))
 d.text((x,y0+100),'Data science.',font=f('InterDisplay-Bold.otf',37),fill=(240,243,250))
 d.text((x,y0+144),'Evidence before conclusions.',font=f('InterDisplay-Bold.otf',37),fill=(240,243,250))
-d.text((x,y0+206),'MSE Data Science · Johns Hopkins University',font=f('Inter-Medium.otf',23),fill=(190,198,214))
+d.text((x,y0+206),'MSE Data Science · Johns Hopkins University',font=f('Inter-Medium.otf',23),fill=(228,233,243))
 t='sahiljangra12.github.io'; ft=f('Inter-SemiBold.otf',21); tw2=d.textlength(t,font=ft); py2=y0+250
 pill=Image.new('RGBA',(W,H),(0,0,0,0)); pd=ImageDraw.Draw(pill)
-pd.rounded_rectangle([x,py2,x+tw2+46,py2+44],radius=22,fill=(255,255,255,40),outline=(255,255,255,130),width=2)
+pd.rounded_rectangle([x,py2,x+tw2+46,py2+44],radius=22,fill=(0,0,0,110),outline=(255,255,255,170),width=2)
 bg=Image.alpha_composite(bg.convert('RGBA'),pill).convert('RGB'); ImageDraw.Draw(bg).text((x+23,py2+9),t,font=ft,fill=(255,255,255))
 print('bottom',py2+44,'card',card)
 out=sys.argv[1]; bg.save(out,optimize=True); bg.save('/tmp/shots/og.png')
