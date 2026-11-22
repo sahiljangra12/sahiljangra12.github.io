@@ -14,3 +14,10 @@ Live at **https://sahiljangra12.github.io**
 - Inside the app, links between pages are `#` links (`#education`, `#s-asda`, `#writing`); the app keeps the address bar on the matching real address. Old `/#education` style links still work.
 - `docs/policyaudit/` and `docs/research/policyaudit/` are the separate PolicyAudit app. `docs/assets/index-*.js` and `styles-*.css` belong to it.
 - The `fui-redesign` branch keeps the earlier hand-built redesign.
+
+## Keeping it fast
+
+- Run `python3 tools/check_site.py` before pushing. It fails if `portfolio.html` grows past 900 KB, if images are embedded in it, if a linked file is missing, if an image is over 600 KB, or if a project has no address.
+- New images: save as `.webp` under `docs/assets/`, add `loading="lazy"`, and keep each under about 500 KB.
+- Phones get lighter effects on purpose (no drifting background, no grain layer, lighter blur); see the "Keep phones smooth" block at the end of `docs/portfolio-hud.css`. Put any new always-moving effect behind the same rule.
+- `docs/poster-live.js` pauses poster animation while the page is scrolling.

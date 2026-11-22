@@ -46,14 +46,16 @@
   function size(it) { var w = it.img.clientWidth, h = it.img.clientHeight; if (!w || !h) return false; var d = Math.min(2, window.devicePixelRatio || 1), W = Math.min(1600, Math.round(w * d)), H = Math.round(W * h / w);
     it.cv.style.left = it.img.offsetLeft + "px"; it.cv.style.top = it.img.offsetTop + "px"; it.cv.style.width = w + "px"; it.cv.style.height = h + "px"; if (it.cv.width !== W || it.cv.height !== H) { it.cv.width = W; it.cv.height = H; } it.k = W / 1600; it.ky = H / 900; return true; }
   var io = new IntersectionObserver(function (es) { es.forEach(function (en) { for (var i = 0; i < items.length; i++) if (items[i].cv === en.target) items[i].on = en.isIntersecting; }); kick(); }, { rootMargin: "120px" });
-  var running = false, last = 0;
+  var running = false, last = 0, scrolled = 0;
+  /* Stay out of the way while the page is being scrolled; resume when it settles. */
+  window.addEventListener("scroll", function () { scrolled = performance.now(); }, { passive: true, capture: true });
   function kick() { if (!running && items.some(function (i) { return i.on; })) { running = true; requestAnimationFrame(loop); } }
-  function loop(ms) { var any = false; if (ms - last > 30 && !document.hidden) { last = ms; var t = ms / 1000;
-      for (var i = 0; i < items.length; i++) { var it = items[i]; if (!it.on) continue; any = true; if (!size(it)) continue; var c = it.ctx; c.setTransform(it.k, 0, 0, it.ky, 0, 0); c.clearRect(0, 0, 1600, 900); c.globalCompositeOperation = "lighter";
+  function loop(ms) { var any = false; if (ms - last > 30 && !document.hidden && ms - scrolled > 160) { last = ms; var t = ms / 1000;
+      for (var i = 0; i < items.length; i++) { var it = items[i]; if (!it.on) continue; any = true; if (!it.ts || ms - it.ts > 600) { it.ok = size(it); it.ts = ms; } if (!it.ok) continue; var c = it.ctx; c.setTransform(it.k, 0, 0, it.ky, 0, 0); c.clearRect(0, 0, 1600, 900); c.globalCompositeOperation = "lighter";
         for (var j = 0; j < it.fx.length; j++) { var e = it.fx[j]; try { draw[e.t](c, e, t, it.seed + j * 31); } catch (err) {} } } }
     else any = items.some(function (i) { return i.on; });
     if (any) requestAnimationFrame(loop); else running = false; }
   function scan() { var imgs = document.querySelectorAll('img[src*="-poster"]'); for (var i = 0; i < imgs.length; i++) attach(imgs[i]); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", scan); else scan();
-  window.addEventListener("load", scan); document.addEventListener("visibilitychange", kick);
+  window.addEventListener("load", scan); document.addEventListener("visibilitychange", kick); window.addEventListener("resize", function () { for (var i = 0; i < items.length; i++) items[i].ts = 0; });
 })();

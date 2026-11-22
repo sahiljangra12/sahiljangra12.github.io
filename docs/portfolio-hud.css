@@ -431,3 +431,16 @@ html[data-theme] body #certificates .cert-list a{justify-self:start;font-size:13
 html[data-theme] body #certificates .cert-list a:hover{text-decoration:underline}
 html[data-theme=light] body #certificates .cert-list a{color:#1d4fa8}
 @media(max-width:820px){html[data-theme] body #certificates .cert-grid,html[data-theme] body #certificates .cert-two{grid-template-columns:1fr}html[data-theme] body #certificates .cert-two li:nth-child(2){border-top:1px solid var(--line);padding-top:13px}html[data-theme] body #certificates .cert-card{padding:20px}}
+
+/* ===== Keep phones smooth: fewer always-moving and full-screen layers ===== */
+@media (max-width:820px),(pointer:coarse){
+  .ambient i{animation:none!important;will-change:auto}
+  .ambient i:nth-child(3){display:none}
+  .hud-grain{display:none!important}
+  :root,:root[data-theme=dark]{--glass-filter:blur(10px) saturate(170%)}
+  :root[data-theme=light]{--glass-filter:blur(10px) saturate(170%)}
+  html[data-theme] body #nav{-webkit-backdrop-filter:blur(12px)!important;backdrop-filter:blur(12px)!important}
+  html[data-theme] body #home-intro .home-tiles::before{filter:none;opacity:.7}
+}
+/* Off-screen sections are skipped by the browser until they are needed. */
+html[data-theme] body #research .wrap>.research-preview,html[data-theme] body #data-credits{content-visibility:auto;contain-intrinsic-size:auto 900px}
