@@ -51,7 +51,19 @@ html[data-theme] body #education .edu-card{height:auto;overflow:hidden;backgroun
 html[data-theme] body #education .edu-img{width:100%;height:auto;aspect-ratio:16/7;max-height:none;border-radius:0;border-bottom:1px solid var(--hud-border)}
 html[data-theme] body #education .edu-body{padding:30px!important;background:none!important;min-width:0}
 html[data-theme] body #education .edu-img>.campus{object-position:center 38%}
-html[data-theme] body #education .edu-banner{display:block;width:100%;height:auto;border-top:1px solid var(--hud-border);border-radius:0!important}
+html[data-theme] body #education .edu-banner{display:block;margin-top:auto;width:100%;height:auto;border-top:1px solid var(--hud-border);border-radius:0!important}
+/* University cards carry their school colour: Hopkins blue, TISS green. */
+html[data-theme] body #education .edu{align-items:stretch}
+html[data-theme] body #education .edu-card{display:flex;flex-direction:column}
+html[data-theme] body #education .edu-card:nth-child(1){--edu-tone:#8ab4ff;--edu-rgb:47,111,224}
+html[data-theme] body #education .edu-card:nth-child(2){--edu-tone:#7ed9a2;--edu-rgb:22,150,96}
+html[data-theme="light"] body #education .edu-card:nth-child(1){--edu-tone:#1d4fa8}
+html[data-theme="light"] body #education .edu-card:nth-child(2){--edu-tone:#0d6b45}
+html[data-theme] body #education .edu-card:nth-child(-n+2){background:linear-gradient(170deg,rgba(var(--edu-rgb),.26),rgba(var(--edu-rgb),.08) 65%),var(--hud-glass)!important;border-color:rgba(var(--edu-rgb),.55)!important}
+html[data-theme] body #education .edu-card:nth-child(-n+2) :is(.edu-img,.edu-banner){border-color:rgba(var(--edu-rgb),.55)}
+html[data-theme] body #education .edu-card:nth-child(-n+2) :is(.edu-meta,.tiss-course-details){border-color:rgba(var(--edu-rgb),.35)}
+html[data-theme] body #education .edu-card:nth-child(-n+2) .status,html[data-theme] body #education .edu-card:nth-child(-n+2) .tiss-course-details summary{color:var(--edu-tone)!important}
+html[data-theme] body #education .edu-card:nth-child(-n+2) .status .dot{background:var(--edu-tone)!important}
 html[data-theme] body #education .edu-body :is(.panel-art,.rp-art){display:none!important}
 html[data-theme] body #education .edu-body h3{font-size:25px;font-weight:800;line-height:1.25;min-height:0;margin:16px 0 18px;overflow-wrap:break-word}
 html[data-theme] body #education .status{font-size:11px;display:flex;align-items:center;gap:8px}
