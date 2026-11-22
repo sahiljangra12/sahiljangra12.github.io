@@ -50,6 +50,8 @@ html[data-theme] body #education .edu{grid-template-columns:repeat(2,minmax(0,1f
 html[data-theme] body #education .edu-card{height:auto;overflow:hidden;background:var(--hud-glass)!important;border:1px solid var(--hud-border)!important;border-radius:14px!important;backdrop-filter:blur(12px);box-shadow:var(--hud-shadow)}
 html[data-theme] body #education .edu-img{width:100%;height:auto;aspect-ratio:16/7;max-height:none;border-radius:0;border-bottom:1px solid var(--hud-border)}
 html[data-theme] body #education .edu-body{padding:30px!important;background:none!important;min-width:0}
+html[data-theme] body #education .edu-img>.campus{object-position:center 38%}
+html[data-theme] body #education .edu-banner{display:block;width:100%;height:auto;border-top:1px solid var(--hud-border);border-radius:0!important}
 html[data-theme] body #education .edu-body :is(.panel-art,.rp-art){display:none!important}
 html[data-theme] body #education .edu-body h3{font-size:25px;font-weight:800;line-height:1.25;min-height:0;margin:16px 0 18px;overflow-wrap:break-word}
 html[data-theme] body #education .status{font-size:11px;display:flex;align-items:center;gap:8px}
