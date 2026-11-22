@@ -264,3 +264,17 @@ html[data-view="home"] .page-links{display:none!important}
 @media(max-width:820px){html[data-view]:not([data-view="home"]) main>section{padding-top:28px}html[data-theme] body .page-links{padding-block:20px 12px;margin-inline:0;padding-inline:20px;scroll-padding-inline:20px}html[data-theme] body .page-links a{min-height:46px}}
 html[data-theme=light] body :is(footer,.page-links){background:transparent!important}
 @media(max-width:820px){html[data-theme] body .page-links>span{display:none}}
+
+/* Home page links as horizontal glass buttons. */
+html[data-theme] body #home-intro .home-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+html[data-theme] body #home-intro .home-tile{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:auto auto;column-gap:16px;row-gap:2px;align-items:center;min-height:72px;padding:12px 22px 12px 14px;text-decoration:none;color:var(--glass-ink)!important;background:var(--glass-bg)!important;border:1px solid var(--glass-border)!important;box-shadow:var(--glass-shadow)!important;-webkit-backdrop-filter:blur(18px) saturate(180%);backdrop-filter:blur(18px) saturate(180%);border-radius:999px!important;transition:background .2s,transform .15s}
+html[data-theme] body #home-intro .home-tile:hover,html[data-theme] body #home-intro .home-tile:focus-visible{background:var(--glass-bg-hover)!important;transform:translateY(-2px);box-shadow:var(--glass-shadow)!important}
+html[data-theme] body #home-intro .home-tile:active{transform:scale(.98)}
+html[data-theme] body #home-intro .home-tile .eyebrow{grid-row:1/3;grid-column:1;display:grid;place-items:center;width:46px;height:46px;margin:0;border-radius:50%;background:var(--glass-strong-bg);color:var(--glass-strong-ink)!important;font-size:13px;font-weight:600;letter-spacing:0;line-height:1}
+html[data-theme] body #home-intro .home-tile .eyebrow::before{content:none}
+html[data-theme] body #home-intro .home-tile strong{grid-column:2;grid-row:1;align-self:end;font-size:17px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html[data-theme] body #home-intro .home-tile>span:not(.eyebrow){grid-column:2;grid-row:2;align-self:start;color:var(--muted);font-size:13px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html[data-theme] body #home-intro .home-tile i{position:static;grid-column:3;grid-row:1/3;font-style:normal;font-size:18px;color:var(--glass-ink);opacity:.7;transition:transform .2s,opacity .2s}
+html[data-theme] body #home-intro .home-tile:hover i{transform:translateX(4px);opacity:1;color:var(--glass-ink)}
+@media(max-width:820px){html[data-theme] body #home-intro .home-tiles{grid-template-columns:1fr;gap:12px}html[data-theme] body #home-intro .home-tile{min-height:68px;padding:10px 20px 10px 12px;border-radius:999px!important}html[data-theme] body #home-intro .home-tile strong{font-size:16.5px}html[data-theme] body #home-intro .home-tile>span:not(.eyebrow){font-size:12.5px}}
+@media(max-width:480px){html[data-theme] body #home-intro .hero-actions .button{white-space:nowrap;padding-inline:16px;font-size:15px;gap:8px}}
