@@ -455,3 +455,31 @@ html[data-theme] body #research .wrap>.research-preview,html[data-theme] body #d
   html[data-theme] body .edu-facts span,html[data-theme] body .writing-entry .source,html[data-theme] body figcaption span{font-size:12px}
   html[data-theme] body .contact-email{min-height:44px}
 }
+
+/* ===== Home: selected work first, then quiet page buttons that sit in the background ===== */
+html[data-theme] body #home-intro .home-work{margin-top:56px}
+html[data-theme] body #home-intro .home-work-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:0 0 22px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+html[data-theme] body #home-intro .home-work-head h2{margin:8px 0 0;font-size:clamp(24px,3vw,34px);font-weight:800;line-height:1.1}
+html[data-theme] body #home-intro .home-work-all{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 4px;color:var(--ink);font-size:14px;font-weight:600;text-decoration:none;white-space:nowrap;opacity:.8}
+html[data-theme] body #home-intro .home-work-all:hover{opacity:1;text-decoration:underline;text-underline-offset:4px}
+html[data-theme] body #home-intro .home-posters{margin:0!important}
+html[data-theme] body #home-intro .home-links{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:36px 0 0}
+html[data-theme] body #home-intro .home-link{display:inline-flex;align-items:center;gap:10px;min-height:46px;padding:0 18px 0 20px;border-radius:999px;color:var(--ink);text-decoration:none;font-size:14.5px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.11);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);transition:background .2s,border-color .2s,transform .2s}
+html[data-theme] body #home-intro .home-link strong{font-weight:600}
+html[data-theme] body #home-intro .home-link i{font-style:normal;opacity:.5;transition:transform .2s,opacity .2s}
+html[data-theme] body #home-intro .home-link:hover,html[data-theme] body #home-intro .home-link:focus-visible{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.26);transform:translateY(-1px)}
+html[data-theme] body #home-intro .home-link:hover i{transform:translateX(3px);opacity:1}
+html[data-theme] body #home-intro .home-link:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+html[data-theme=light] body #home-intro .home-link{background:rgba(10,20,40,.03);border-color:rgba(10,20,40,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.7)}
+html[data-theme=light] body #home-intro .home-link:hover,html[data-theme=light] body #home-intro .home-link:focus-visible{background:rgba(10,20,40,.07);border-color:rgba(10,20,40,.3)}
+@media(max-width:600px){
+  html[data-theme] body #home-intro .home-work{margin-top:40px}
+  html[data-theme] body #home-intro .home-posters{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+  html[data-theme] body #home-intro .home-posters .pi-meta{padding:8px 10px 10px}
+  html[data-theme] body #home-intro .home-posters .pi-meta small{font-size:11px;letter-spacing:.04em}
+  html[data-theme] body #home-intro .home-posters .pi-title{font-size:13px;line-height:1.3}
+  html[data-theme] body #home-intro .home-links{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:28px}
+  html[data-theme] body #home-intro .home-link{justify-content:space-between;padding:0 14px 0 16px;font-size:14px}
+  html[data-theme] body #home-intro .home-link:first-child{grid-column:1/-1}
+}
+@media(prefers-reduced-motion:reduce){html[data-theme] body #home-intro .home-link,html[data-theme] body #home-intro .home-link i{transition:none}}

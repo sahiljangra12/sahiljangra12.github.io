@@ -176,7 +176,7 @@ def main():
               "alumniOf": {"@type": "CollegeOrUniversity", "name": "Tata Institute of Social Sciences"},
               "email": "mailto:sfnu1@jh.edu",
               "sameAs": ["https://www.linkedin.com/in/sahil-j-3b5322261", "https://github.com/sahiljangra12", "https://www.instagram.com/sahil.j12/"]}
-    tiles = soup.select('#home-intro .home-tile')
+    tiles = soup.select('#home-intro .home-link')
     tile_list = '<ul>' + ''.join('<li><a href="%s">%s</a> — %s</li>' % (
         hash_to_path.get(a['href'][1:], a['href']) if a['href'].startswith('#') else a['href'],
         html.escape(a.find('strong').get_text(' ', strip=True)), html.escape(a.find_all('span')[-1].get_text(' ', strip=True))) for a in tiles) + '</ul>'
