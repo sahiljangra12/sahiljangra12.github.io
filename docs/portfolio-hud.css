@@ -483,3 +483,5 @@ html[data-theme=light] body #home-intro .home-link:hover,html[data-theme=light] 
   html[data-theme] body #home-intro .home-link:first-child{grid-column:1/-1}
 }
 @media(prefers-reduced-motion:reduce){html[data-theme] body #home-intro .home-link,html[data-theme] body #home-intro .home-link i{transition:none}}
+html[data-theme] body #home-intro .home-group{margin:0 0 14px}
+html[data-theme] body #home-intro .home-posters+.home-group{margin-top:34px}
