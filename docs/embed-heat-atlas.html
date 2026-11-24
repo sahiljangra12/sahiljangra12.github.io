@@ -211,6 +211,9 @@ footer a{color:var(--hero-ink)}
 
 /* Embedded viewport accommodations; research observations remain unchanged. */
 .charts{grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr))}.method{grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr))}#explore,#evidence{scroll-margin-top:150px}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Phones: finger-sized links and chips, readable table headings */
+@media (max-width:760px){.hero .topbar nav a{display:inline-flex;align-items:center;min-height:44px}.chip{min-height:44px}th{font-size:11.5px}.heronote{font-size:12px}label input[type=checkbox]{width:20px;height:20px}}
 </style>
  <style id="tiss-transcript-courses">.tiss-course-details{margin-top:20px;border-top:1px solid var(--line);padding-top:16px}.tiss-course-details summary{cursor:pointer;color:var(--text);font-size:14px;font-weight:600;line-height:1.6}.tiss-course-details summary:focus-visible{outline:2px solid var(--accent);outline-offset:4px}.tiss-course-list{margin:16px 0 0;padding:0;list-style:none}.tiss-course-list li{padding:10px 0;border-bottom:1px solid var(--line);font-size:14px;line-height:1.6;color:var(--text-soft);overflow-wrap:break-word}.tiss-course-list strong{white-space:nowrap;color:var(--text)}</style><style id="clean-project-imagery">
 /* One original project screen, no layered or simulated decoration. */

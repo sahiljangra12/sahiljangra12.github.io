@@ -444,3 +444,14 @@ html[data-theme=light] body #certificates .cert-list a{color:#1d4fa8}
 }
 /* Off-screen sections are skipped by the browser until they are needed. */
 html[data-theme] body #research .wrap>.research-preview,html[data-theme] body #data-credits{content-visibility:auto;contain-intrinsic-size:auto 900px}
+
+/* ===== Phones: readable small print and finger-sized links ===== */
+@media (max-width:640px){
+  html[data-theme] body #research .poster-index .pi-meta small{font-size:11px;letter-spacing:.04em}
+  html[data-theme] body footer.wrap{font-size:12px}
+  html[data-theme] body footer.wrap span,html[data-theme] body footer.wrap a{font-size:12px}
+  html[data-theme] body footer.wrap a{display:inline-flex;align-items:center;min-height:44px}
+  html[data-theme] body #nav .brand{display:inline-flex;align-items:center;min-height:44px}
+  html[data-theme] body .edu-facts span,html[data-theme] body .writing-entry .source,html[data-theme] body figcaption span{font-size:12px}
+  html[data-theme] body .contact-email{min-height:44px}
+}

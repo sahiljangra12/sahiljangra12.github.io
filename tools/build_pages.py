@@ -21,7 +21,7 @@ OG_IMAGE = SITE + '/assets/social/sahil-preview-4.png'
 NAME = 'Sahil'
 
 PROJECTS = [  # id in the app, address slug
-    ('s-grid', 'grid-data-centers'), ('s-asda', 'asda-lab'), ('s-krishi', 'krishi-mitra-haryana'),
+    ('s-opendata', 'open-data-company'), ('s-grid', 'grid-data-centers'), ('s-asda', 'asda-lab'), ('s-krishi', 'krishi-mitra-haryana'),
     ('s-billback', 'billback-baltimore'), ('s-neural', 'neural-network-lab'), ('s-charm', 'charm-city-pulse'),
     ('s-policyaudit', 'policy-audit'), ('s-basket', 'basket-compare'), ('s-claimback', 'claimback'),
     ('s-trees', 'street-trees'), ('s-heat', 'baltimore-heat-atlas'), ('s-climate', 'social-shortfall-climate-overshoot'),
