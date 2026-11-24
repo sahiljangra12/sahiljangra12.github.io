@@ -485,3 +485,10 @@ html[data-theme=light] body #home-intro .home-link:hover,html[data-theme=light] 
 @media(prefers-reduced-motion:reduce){html[data-theme] body #home-intro .home-link,html[data-theme] body #home-intro .home-link i{transition:none}}
 html[data-theme] body #home-intro .home-group{margin:0 0 14px}
 html[data-theme] body #home-intro .home-posters+.home-group{margin-top:34px}
+/* ===== Social icons at the foot of every page ===== */
+html[data-theme] body footer.wrap{flex-wrap:wrap!important;justify-content:center!important}
+html[data-theme] body .foot-social{flex:0 0 100%;display:flex;justify-content:center;flex-wrap:wrap;gap:14px;margin:0 0 14px}
+html[data-theme] body .page>.foot-social{margin:48px auto 0;padding:28px 20px 96px;border-top:1px solid var(--line);max-width:1200px}
+html[data-theme] body .foot-social .cl{width:48px;height:48px;min-height:48px;padding:0;display:inline-grid;place-items:center;border-radius:50%!important}
+html[data-theme] body .foot-social .cl svg{width:24px;height:24px;display:block}
+@media(hover:hover){html[data-theme] body .foot-social .cl:hover{transform:translateY(-2px)}}

@@ -1,1 +1,1 @@
-var e=(e=``)=>`/portfolio.html?v=cfbe61d1cc${e}`;export{e as t};
+var e=(e=``)=>`/portfolio.html?v=52d0f3e212${e}`;export{e as t};
