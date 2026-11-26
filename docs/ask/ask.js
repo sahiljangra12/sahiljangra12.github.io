@@ -7,7 +7,12 @@
 
    Use:  <script defer src="https://sahiljangra12.github.io/ask/ask.js" data-site="Site name"></script>
    Optional attributes: data-base="/folder/" (which pages belong to the site), data-pages="a.html,b.html" (extra pages
-   to read), data-about="One sentence about the site", data-accent="#2f6df6", data-side="left", data-lang="hi". */
+   to read), data-about="One sentence about the site", data-accent="#2f6df6", data-side="left", data-lang="hi",
+   data-claude="off" (hide the "Ask Claude" link).
+
+   Ask Claude: every answer ends with a link that opens claude.ai in a new tab with the question, the page address and
+   the best passage already typed in. The visitor uses their own Claude account (the free plan works), so it costs this
+   site nothing and needs no key. */
 (function () {
   "use strict";
   if (window.__askLoaded || window.top !== window.self && !document.currentScript.dataset.frame) return;
@@ -19,9 +24,11 @@
   var ABOUT = D.about || ((document.querySelector('meta[name="description"]') || {}).content || "");
   var HI = (D.lang || document.documentElement.lang || "en").slice(0, 2) === "hi";
   var T = HI ? { ask: "पूछें", title: "इस साइट में खोजें", ph: "अपना सवाल लिखें…", send: "भेजें", close: "बंद करें", reading: "साइट पढ़ी जा रही है…",
-      hello: "नमस्ते! इस साइट के बारे में कुछ भी पूछें।", none: "इस साइट पर इसका जवाब नहीं मिला। ये आज़माएँ:", open: "यह हिस्सा खोलें", more: "और देखें", ai: "AI उत्तर", aiNote: "AI ने नीचे दिए हिस्सों से लिखा है। गलती हो सकती है, स्रोत देखें।", here: "इसी पेज पर", try_: "उदाहरण", foot: "जवाब इसी साइट के पन्नों से।" }
+      hello: "नमस्ते! इस साइट के बारे में कुछ भी पूछें।", none: "इस साइट पर इसका जवाब नहीं मिला। ये आज़माएँ:", open: "यह हिस्सा खोलें", more: "और देखें", ai: "AI उत्तर", aiNote: "AI ने नीचे दिए हिस्सों से लिखा है। गलती हो सकती है, स्रोत देखें।", here: "इसी पेज पर", try_: "उदाहरण", foot: "जवाब इसी साइट के पन्नों से।",
+      claude: "Claude से पूछें", claudeHi: "इस पेज के बारे में Claude से बात करें", claudeSub: "claude.ai नए टैब में खुलेगा · मुफ़्त खाता चलेगा" }
     : { ask: "Ask", title: "Ask " + SITE, ph: "Type a question…", send: "Send", close: "Close", reading: "Reading the site…",
-      hello: "Hi! Ask me anything about " + SITE + ".", none: "I could not find that on this site. You could try:", open: "Open this part", more: "Also on this site", ai: "AI answer", aiNote: "Written by AI from the parts below. It can be wrong, so check the source.", here: "on this page", try_: "Try", foot: "Answers come from this site's own pages." };
+      hello: "Hi! Ask me anything about " + SITE + ".", none: "I could not find that on this site. You could try:", open: "Open this part", more: "Also on this site", ai: "AI answer", aiNote: "Written by AI from the parts below. It can be wrong, so check the source.", here: "on this page", try_: "Try", foot: "Answers come from this site's own pages.",
+      claude: "Ask Claude about this", claudeHi: "Chat with Claude about this page", claudeSub: "Opens claude.ai in a new tab · free account works" };
 
   /* ---------- words ---------- */
   var STOP = {}; ("a an and are as at be but by can could did do does for from had has have how i if in into is it its me my of on or our so than that the their them then there these they this to was we were what when where which who whom why will with would you your about tell show give find please any some much many more most kya hai ka ki ke ko se me mein aur").split(" ").forEach(function (w) { STOP[w] = 1; });
@@ -123,6 +130,7 @@
     ".ask-a p{margin:0 0 6px;font-size:15px;color:var(--fg)}.ask-a .ask-tag{display:inline-block;font-size:12px;font-weight:650;color:var(--ask);margin-bottom:4px}.ask-dark .ask-a .ask-tag{color:#9dbcff}" +
     ".ask-a a,.ask-chip{display:flex;align-items:center;min-height:44px;padding:6px 12px;margin-top:6px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);text-decoration:none;font-size:14px;line-height:1.3;cursor:pointer;text-align:left;width:100%}" +
     ".ask-a a span{color:var(--mut);font-size:12px;display:block}.ask-a a>div{flex:1;min-width:0}.ask-a a:after{content:'›';font-size:20px;color:var(--mut);margin-left:8px}.ask-a small{display:block;margin-top:8px;color:var(--mut);font-size:12px}" +
+    ".ask-a a.ask-claude{border-color:#d97757;background:rgba(217,119,87,.08)}.ask-a a.ask-claude:after{content:'↗';font-size:16px}.ask-dark .ask-a a.ask-claude{background:rgba(217,119,87,.16)}" +
     ".ask-form{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line)}.ask-in{flex:1;min-width:0;height:46px;border:1px solid var(--line);border-radius:12px;padding:0 12px;font-size:16px;background:var(--bg);color:var(--fg)}" +
     ".ask-in:focus{outline:2px solid var(--ask);outline-offset:0}.ask-go{height:46px;min-width:64px;padding:0 14px;border:0;border-radius:12px;background:var(--ask);color:#fff;font-size:15px;font-weight:600;cursor:pointer}" +
     ".ask-foot{padding:0 12px 8px;font-size:12px;color:var(--mut);text-align:center}.ask-dots:after{content:'…';animation:askd 1s steps(3) infinite}@keyframes askd{0%{opacity:.2}50%{opacity:1}}" +
@@ -160,12 +168,24 @@
     root.classList.toggle("ask-dark", D.theme === "dark" || (D.theme !== "light" && dark())); root.classList.add("ask-open"); readSite(); checkAI();
     if (!greeted) { greeted = true; var a = h("div", "ask-a"); a.appendChild(h("p", "", T.hello)); if (ABOUT) a.appendChild(h("p", "", ABOUT.slice(0, 220)));
       var heads = [], seen = {}; passages(document, key(location), true).forEach(function (p) { if (!seen[p.h] && p.h !== p.p && p.h.length > 5 && p.h.length < 46 && heads.length < 3) { seen[p.h] = 1; heads.push(p.h); } });
-      (D.try ? D.try.split("|") : heads).forEach(function (t) { var c = h("button", "ask-chip", t); c.type = "button"; c.addEventListener("click", function () { if (!busy) ask(t); }); a.appendChild(c); }); log.appendChild(a); }
+      (D.try ? D.try.split("|") : heads).forEach(function (t) { var c = h("button", "ask-chip", t); c.type = "button"; c.addEventListener("click", function () { if (!busy) ask(t); }); a.appendChild(c); }); if (CLAUDE) a.appendChild(claudeLink("", null)); log.appendChild(a); }
     if (matchMedia("(min-width:561px)").matches) input.focus();
   }
   function close() { root.classList.remove("ask-open"); lift(); fab.focus(); }
   function link(d, sub, label) { var a = h("a"), box = h("div"); a.href = d.u; if (window.top !== window.self) a.target = "_top"; box.appendChild(document.createTextNode(label || d.h)); box.appendChild(h("span", "", sub || (d.el ? T.here : d.p))); a.appendChild(box);
     a.addEventListener("click", function (e) { if (d.el && d.el.isConnected && d.el.getClientRects().length) { e.preventDefault(); close(); d.el.scrollIntoView({ behavior: "smooth", block: "start" }); } else if (matchMedia("(max-width:560px)").matches) close(); }); return a; }
+
+  /* ---------- Ask Claude: a link to claude.ai with the question and context typed in ---------- */
+  function claudeLink(q, d, terms) {
+    var page = location.href.split("#")[0], lines = [];
+    lines.push(HI ? "मैं यह वेबसाइट पढ़ रहा/रही हूँ: " + SITE + " (" + page + ")" : "I'm reading the website \"" + SITE + "\" (" + page + ").");
+    if (ABOUT) lines.push(ABOUT.slice(0, 300));
+    if (d) lines.push("", HI ? "साइट से संबंधित हिस्सा (" + d.h + "):" : "Relevant part of the site (" + d.h + "):", "\"" + excerpt(d, terms || []).slice(0, 700) + "\"");
+    lines.push("", q ? (HI ? "मेरा सवाल: " : "My question: ") + q : (HI ? "इस पेज को समझने में मेरी मदद करें।" : "Help me understand this page. You can open the link above if you can browse."));
+    var a = h("a", "ask-claude"), box = h("div"); a.href = "https://claude.ai/new?q=" + encodeURIComponent(lines.join("\n").slice(0, 3000));
+    a.target = "_blank"; a.rel = "noopener"; box.appendChild(document.createTextNode(q ? T.claude : T.claudeHi)); box.appendChild(h("span", "", T.claudeSub)); a.appendChild(box); return a;
+  }
+  var CLAUDE = D.claude !== "off";
 
   /* ---------- the AI service: used when it says it is open, never needed ---------- */
   var ai = null;
@@ -194,6 +214,7 @@
         else { a.appendChild(h("p", "", T.none)); }
         if (strong) { a.appendChild(link(hits[0].d, hits[0].d.el ? T.here : hits[0].d.p, T.open)); if (hits.length > 1) { a.appendChild(h("small", "", T.more)); hits.slice(1).forEach(function (x) { a.appendChild(link(x.d)); }); } }
         else { var heads = {}, n = 0; (hits.length ? hits.map(function (x) { return x.d; }) : docs).forEach(function (d) { if (!heads[d.u] && n < 3 && d.h) { heads[d.u] = 1; n++; a.appendChild(link(d)); } }); }
+        if (CLAUDE) a.appendChild(claudeLink(q, strong ? hits[0].d : null, r.terms));
         done();
       };
       if (ai) { wait.textContent = ""; wait.className = "ask-dots"; askAI(q, strong ? hits : []).then(show); } else show("");
