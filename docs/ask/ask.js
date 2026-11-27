@@ -8,9 +8,9 @@
    Use:  <script defer src="https://sahiljangra12.github.io/ask/ask.js" data-site="Site name"></script>
    Optional attributes: data-base="/folder/" (which pages belong to the site), data-pages="a.html,b.html" (extra pages
    to read), data-about="One sentence about the site", data-accent="#2f6df6", data-side="left", data-lang="hi",
-   data-claude="off" (hide the "Ask Claude" link).
+   data-claude="on" (show the "Ask Claude" link; it is off unless a page asks for it).
 
-   Ask Claude: every answer ends with a link that opens claude.ai in a new tab with the question, the page address and
+   Ask Claude (pages with data-claude="on"): every answer ends with a link that opens claude.ai in a new tab with the question, the page address and
    the best passage already typed in. The visitor uses their own Claude account (the free plan works), so it costs this
    site nothing and needs no key. */
 (function () {
@@ -185,7 +185,7 @@
     var a = h("a", "ask-claude"), box = h("div"); a.href = "https://claude.ai/new?q=" + encodeURIComponent(lines.join("\n").slice(0, 3000));
     a.target = "_blank"; a.rel = "noopener"; box.appendChild(document.createTextNode(q ? T.claude : T.claudeHi)); box.appendChild(h("span", "", T.claudeSub)); a.appendChild(box); return a;
   }
-  var CLAUDE = D.claude !== "off";
+  var CLAUDE = D.claude === "on";
 
   /* ---------- the AI service: used when it says it is open, never needed ---------- */
   var ai = null;
